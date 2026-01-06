@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  rayders-on-the-storm:
+    build: .
+    ports:
+      - "2222:22"
+    volumes:
+      - ./domains:/app/domains
+      - ./workflows:/app/workflows
+      - ./wordlists:/app/wordlists
+      - ./output:/app/output
+    command:
+      [
+        "sh",
+        "-c",
+        "echo 'Like a dog without bone, an actor out on loan...' && rayder -w /app/main.yaml && exec /usr/sbin/sshd -D -e",
+      ]

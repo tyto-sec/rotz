@@ -1,0 +1,10 @@
+vars:
+  DOMAINS_PATH: "domains/domains.txt"
+  OUTPUT_PATH: "output"
+
+parallel: false
+modules:
+
+  - name: subdomain_enum
+    cmds:
+      - cat {{DOMAINS_PATH}} | parallel -j15 subfinder -d {} -silent -o {{OUTPUT_PATH}}/subs/{}.subfinder.txt
