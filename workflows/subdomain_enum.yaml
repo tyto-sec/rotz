@@ -2,9 +2,17 @@ vars:
   DOMAINS_PATH: "domains/domains.txt"
   OUTPUT_PATH: "output"
 
-parallel: false
+parallel: true
 modules:
 
-  - name: subdomain_enum
+  - name: subfinder_enum
     cmds:
-      - cat {{DOMAINS_PATH}} | parallel -j15 subfinder -d {} -silent -o {{OUTPUT_PATH}}/subs/{}.subfinder.txt
+      - cat {{DOMAINS_PATH}} | parallel -j15 --plus 'subfinder -d {} -silent | anew {{OUTPUT_PATH}}/subs/{}.subfinder.subs.txt | anew {{OUTPUT_PATH}}/subs/{}.subs.txt | anew {{OUTPUT_PATH}}/all.subs.txt'
+
+  - name: chaos_enum
+    cmds:
+      - cat {{DOMAINS_PATH}} | parallel -j15 --plus 'chaos -d {} -silent | anew {{OUTPUT_PATH}}/subs/{}.chaos.subs.txt | anew {{OUTPUT_PATH}}/subs/{}.subs.txt | anew {{OUTPUT_PATH}}/all.subs.txt'
+
+  - name: github_enum
+    cmds:
+      - cat {{DOMAINS_PATH}} | parallel -j15 --plus 'github-subdomains -d {} -o {{OUTPUT_PATH}}/subs/{}.github.subs.txt.temp && cat {{OUTPUT_PATH}}/subs/{}.github.subs.txt.temp | anew {{OUTPUT_PATH}}/subs/{}.github.subs.txt | anew {{OUTPUT_PATH}}/subs/{}.subs.txt | anew {{OUTPUT_PATH}}/all.subs.txt && rm {{OUTPUT_PATH}}/subs/{}.github.subs.txt.temp'

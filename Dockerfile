@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 ENV DEBIAN_FRONTEND=noninteractive
 
-
+COPY .env /root/.env
 COPY install.sh /usr/local/bin/install.sh
 COPY ssh_setup.sh /usr/local/bin/ssh_setup.sh
 RUN chmod +x /usr/local/bin/install.sh /usr/local/bin/ssh_setup.sh

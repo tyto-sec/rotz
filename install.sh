@@ -1,6 +1,17 @@
 #!/bin/sh
 set -e
 
+# Carrega variáveis de ambiente do arquivo .env
+ENV_FILE="/root/.env"
+set -a
+. "$ENV_FILE" 
+set +a
+
+# Adiciona ao profile para persistir
+echo "export PDCP_API_KEY=$PDCP_API_KEY" >> /etc/profile
+echo "export GITHUB_TOKEN=$GITHUB_TOKEN" >> /etc/profile
+
+
 # Instala OpenSSH Server e utilitários básicos
 apt-get update && \
 apt-get install -y --no-install-recommends openssh-server ca-certificates && \
@@ -35,6 +46,9 @@ mkdir -p $GOPATH
 # Instala Python 3 e pip
 apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
+
+## Tools Installation
+
 # Instala jq
 apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
 
@@ -47,18 +61,31 @@ apt-get update && apt-get install -y coreutils && rm -rf /var/lib/apt/lists/*
 # Instala parallel
 apt-get update && apt-get install -y parallel && rm -rf /var/lib/apt/lists/*
 
+# Instala o anew
+go install -v github.com/tomnomnom/anew@latest
+cp /root/go/bin/anew /usr/local/bin/anew
+
+
+## Subdomain Enumeration Tools
+
 # Instala subfinder
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 cp /root/go/bin/subfinder /usr/local/bin/subfinder
+
+# Instala chaos
+go install -v github.com/projectdiscovery/chaos-client/cmd/chaos@latest
+cp /root/go/bin/chaos /usr/local/bin/chaos
+
+# Instala github-subdomains
+go install github.com/gwen001/github-subdomains@latest
+cp /root/go/bin/github-subdomains /usr/local/bin/github-subdomains
+
+
 
 # Instala httpx
 pip uninstall 'httpx[cli]'
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 cp /root/go/bin/httpx /usr/local/bin/httpx
-
-# Instala o anew
-go install -v github.com/tomnomnom/anew@latest
-cp /root/go/bin/anew /usr/local/bin/anew
 
 # Instala o dnsx
 go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
@@ -95,3 +122,4 @@ ln -s /opt/Bug-Bounty-Toolz/collector.py /usr/local/bin/linkFinderCollector
 # Instala o Rayder
 go install github.com/devanshbatham/rayder@v0.0.4
 cp /root/go/bin/rayder /usr/local/bin/rayder
+
