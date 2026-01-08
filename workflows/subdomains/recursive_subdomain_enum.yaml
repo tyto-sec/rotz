@@ -8,10 +8,10 @@ modules:
   - name: subfinder_recursive_enum
     cmds:
       - |
-        echo "[*] Recursive Subfinder subdomain enumeration with ($(ls {{OUTPUT_PATH}}/subs/*.subs.txt 2>/dev/null | wc -l) files)"
-        cat {{OUTPUT_PATH}}/subs/*.subs.txt | sort -u | \
+        echo "[*] Recursive Subfinder subdomain enumeration:)"
+        cat {{OUTPUT_PATH}}/subs/all.subs.txt | sort -u | \
         parallel -j64 --plus '
-          subfinder -d {} -silent -t 100 2>/dev/null | grep -v "*" | \
+          subfinder -d {} -silent -t 100 -all | grep -v "*" | \
           anew {{OUTPUT_PATH}}/subs/recursive/subfinder.recursive.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '
@@ -19,10 +19,10 @@ modules:
   - name: chaos_recursive_enum
     cmds:
       - |
-        echo "[*]  Recursive Subfinder subdomain enumeration with ($(ls {{OUTPUT_PATH}}/subs/*.subs.txt 2>/dev/null | wc -l) files)"
-        cat {{OUTPUT_PATH}}/subs/*.subs.txt | sort -u | \
+        echo "[*]  Recursive Chaos subdomain enumeration:)"
+        cat {{OUTPUT_PATH}}/subs/all.subs.txt | sort -u | \
         parallel -j64 --plus '
-          chaos -d {} -silent -no-color -key $GITHUB_TOKEN 2>/dev/null | grep -v "*" | \
+          chaos -d {} -silent | grep -v "*" | \
           anew {{OUTPUT_PATH}}/subs/recursive/chaos.recursive.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '
