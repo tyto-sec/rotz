@@ -1,0 +1,14 @@
+vars:
+  DOMAINS_PATH: "domains/domains.txt"
+  OUTPUT_PATH: "output"
+
+parallel: false
+modules:
+
+  - name: subdomain_enum
+    cmds:
+      - rayder -w workflows/subdomains/subdomain_enum.yaml DOMAINS_PATH={{DOMAINS_PATH}} OUTPUT_PATH={{OUTPUT_PATH}}
+  
+  - name: recursive_subdomain_enum
+    cmds:
+      - rayder -w workflows/subdomains/recursive_subdomain_enum.yaml DOMAINS_PATH={{DOMAINS_PATH}} OUTPUT_PATH={{OUTPUT_PATH}}

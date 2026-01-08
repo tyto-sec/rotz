@@ -17,8 +17,8 @@ EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D", "-e"]
 
-WORKDIR /app
+COPY config/subfinder/provider-config.yaml /root/.config/subfinder/provider-config.yaml
 
-COPY main.yaml .
+WORKDIR /app
 
 VOLUME ["/app/output", "/app/domains", "/app/workflows", "/app/wordlists"]

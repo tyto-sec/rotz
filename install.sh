@@ -80,6 +80,9 @@ cp /root/go/bin/chaos /usr/local/bin/chaos
 go install github.com/gwen001/github-subdomains@latest
 cp /root/go/bin/github-subdomains /usr/local/bin/github-subdomains
 
+# Instala ammass
+CGO_ENABLED=0 go install -v github.com/owasp-amass/amass/v5/cmd/amass@main
+cp /root/go/bin/amass /usr/local/bin/amass
 
 
 # Instala httpx

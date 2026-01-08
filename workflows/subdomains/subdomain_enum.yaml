@@ -1,0 +1,44 @@
+vars:
+  DOMAINS_PATH: "domains/domains.txt"
+  OUTPUT_PATH: "output"
+
+parallel: true
+modules:
+
+  - name: subfinder_enum
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs {{OUTPUT_PATH}}/logs
+        cat {{DOMAINS_PATH}} | parallel -j32 --plus '
+          echo "[+] Subfinder Subdomain Enumeration: {}" >&2
+          subfinder -d {} -silent -t 200 -all | \
+          grep -v "*" | sort -u | \
+          anew {{OUTPUT_PATH}}/subs/{}.subfinder.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/all.subs.txt
+        ' | tee {{OUTPUT_PATH}}/logs/subfinder.log
+
+  - name: chaos_enum
+    cmds:
+      - |
+        cat {{DOMAINS_PATH}} | parallel -j32 --plus '
+          echo "[+] Chaos Subdomain Enumeration: {}" >&2
+          chaos -d {} -silent | \
+          grep -v "*" | sort -u | \
+          anew {{OUTPUT_PATH}}/subs/{}.chaos.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/all.subs.txt
+        ' | tee {{OUTPUT_PATH}}/logs/chaos.log
+
+  - name: github_enum
+    cmds:
+      - |
+        cat {{DOMAINS_PATH}} | parallel -j16 --plus '
+          echo "[+] Github Subdomains Enumeration: {}" >&2
+          github-subdomains -d {} -o {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null || true && \
+          cat {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null | grep -v "*" | sort -u | \
+          anew {{OUTPUT_PATH}}/subs/{}.github.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/all.subs.txt && \
+          rm -f {{OUTPUT_PATH}}/subs/{}.github.temp
+        '
