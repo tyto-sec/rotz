@@ -29,6 +29,11 @@ export LC_ALL=C
 export LANG=C.UTF-8
 echo 'export LC_ALL=C' >> ~/.bashrc
 
+# Variáveis de ambiente do Go para persistir
+echo 'export PDCP_API_KEY='$PDCP_API_KEY >> ~/.bashrc
+echo 'export GITHUB_TOKEN='$GITHUB_TOKEN >> ~/.bashrc
+echo 'export SHODAN_API_KEY='$SHODAN_API_KEY >> ~/.bashrc
+
 # Adiciona ao profile para persistir
 echo "export GOROOT=/usr/local/go" >> /etc/profile
 echo "export GOPATH=/root/go" >> /etc/profile
@@ -42,6 +47,9 @@ apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/
 
 
 ## Tools Installation
+
+# Instala dnsutils
+apt-get update && apt-get install -y dnsutils && rm -rf /var/lib/apt/lists/*
 
 # Instala jq
 apt-get update && apt-get install -y jq && rm -rf /var/lib/apt/lists/*
@@ -58,7 +66,6 @@ apt-get update && apt-get install -y parallel && rm -rf /var/lib/apt/lists/*
 # Instala o anew
 go install -v github.com/tomnomnom/anew@latest
 cp /root/go/bin/anew /usr/local/bin/anew
-
 
 ## Subdomain Enumeration Tools
 
@@ -78,11 +85,28 @@ cp /root/go/bin/github-subdomains /usr/local/bin/github-subdomains
 CGO_ENABLED=0 go install -v github.com/owasp-amass/amass/v5/cmd/amass@main
 cp /root/go/bin/amass /usr/local/bin/amass
 
+## Subdomain Resolution
 
 # Instala httpx
 pip uninstall 'httpx[cli]'
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 cp /root/go/bin/httpx /usr/local/bin/httpx
+
+## Subdomain Enumeration
+
+# Instala gowitness
+go install github.com/sensepost/gowitness@latest
+cp /root/go/bin/gowitness /usr/local/bin/gowitness
+
+
+## Infrastructure Enumeration
+
+# Instala Shodan
+pip install -U --user shodan
+export PATH=$PATH:/root/.local/bin
+echo 'export PATH=$PATH:/root/.local/bin' >> ~/.bashrc
+shodan init $SHODAN_API_KEY
+
 
 # Instala o dnsx
 go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
