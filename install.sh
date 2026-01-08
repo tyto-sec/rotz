@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+# Carrega variáveis de ambiente do arquivo .env, se existir
+if [ -f /root/.env ]; then
+    export $(cat /root/.env | grep -v '^#' | xargs)
+fi
+
 # Adiciona ao profile para persistir
 echo "export PDCP_API_KEY=$PDCP_API_KEY" >> /etc/profile
 echo "export GITHUB_TOKEN=$GITHUB_TOKEN" >> /etc/profile

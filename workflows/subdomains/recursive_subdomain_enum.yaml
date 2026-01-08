@@ -1,5 +1,4 @@
 vars:
-  DOMAINS_PATH: "domains/domains.txt"
   OUTPUT_PATH: "output"
 
 parallel: true

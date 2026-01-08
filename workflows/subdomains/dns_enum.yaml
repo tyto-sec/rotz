@@ -1,0 +1,40 @@
+vars:
+  DOMAINS_PATH: "domains/domains.txt"
+  OUTPUT_PATH: "output"
+
+parallel: false
+modules:
+
+  - name: dns_enum
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/dns
+        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
+        dnsx -silent -recon -nc -o {{OUTPUT_PATH}}/subs/dns/all.dns.txt
+
+  - name: txt_enum
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/dns/all.dns.txt | \
+        grep -E '\sTXT\s' | anew {{OUTPUT_PATH}}/subs/dns/txt_records.dns.txt
+
+  - name: email_spoofing_enum
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/dns/txt_records.dns.txt | \
+        grep -Ei '\b(~|\?)all\b' | \
+        grep -i 'v=spf1' | anew {{OUTPUT_PATH}}/subs/dns/vulnerable.email_spoofing.dns.txt
+    
+  - name: cname_enum
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/dns/all.dns.txt | \
+        grep -E '\sCNAME\s' | anew {{OUTPUT_PATH}}/subs/dns/cname_records.dns.txt
+  
+  - name: cname_domains
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/dns/cname_records.dns.txt | \
+        awk '/CNAME/ {print $1}' | \
+        cut -d. -f1- | \
+        sort -u | anew {{OUTPUT_PATH}}/subs/dns/cname_domains.txt 
