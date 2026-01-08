@@ -8,7 +8,7 @@ modules:
   - name: subfinder_enum
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/subs {{OUTPUT_PATH}}/logs
+        mkdir -p {{OUTPUT_PATH}}/subs
         cat {{DOMAINS_PATH}} | parallel -j32 --plus '
           echo "[+] Subfinder Subdomain Enumeration: {}" >&2
           subfinder -d {} -silent -t 200 -all | \
@@ -16,7 +16,7 @@ modules:
           anew {{OUTPUT_PATH}}/subs/{}.subfinder.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
-        ' | tee {{OUTPUT_PATH}}/logs/subfinder.log
+        '
 
   - name: chaos_enum
     cmds:
@@ -28,7 +28,7 @@ modules:
           anew {{OUTPUT_PATH}}/subs/{}.chaos.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
-        ' | tee {{OUTPUT_PATH}}/logs/chaos.log
+        '
 
   - name: github_enum
     cmds:
