@@ -12,9 +12,7 @@ modules:
         cat {{OUTPUT_PATH}}/subs/*.subs.txt | sort -u | \
         parallel -j64 --plus '
           subfinder -d {} -silent -t 100 2>/dev/null | grep -v "*" | \
-          anew {{OUTPUT_PATH}}/subs/recursive/{}.subfinder.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/recursive/{}.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/recursive/all.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/recursive/subfinder.recursive.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '
   
@@ -25,8 +23,6 @@ modules:
         cat {{OUTPUT_PATH}}/subs/*.subs.txt | sort -u | \
         parallel -j64 --plus '
           chaos -d {} -silent -no-color -key $GITHUB_TOKEN 2>/dev/null | grep -v "*" | \
-          anew {{OUTPUT_PATH}}/subs/recursive/{}.chaos.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/recursive/{}.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/recursive/all.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/recursive/chaos.recursive.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '

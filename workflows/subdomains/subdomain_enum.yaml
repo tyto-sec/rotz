@@ -35,7 +35,7 @@ modules:
       - |
         cat {{DOMAINS_PATH}} | parallel -j16 --plus '
           echo "[+] Github Subdomains Enumeration: {}" >&2
-          github-subdomains -d {} -o {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null || true && \
+          github-subdomains -d {} -k -t $GITHUB_TOKEN -o {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null || true && \
           cat {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null | grep -v "*" | sort -u | \
           anew {{OUTPUT_PATH}}/subs/{}.github.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
