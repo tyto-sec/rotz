@@ -9,12 +9,12 @@ modules:
     cmds:
       - |
         mkdir -p {{OUTPUT_PATH}}/subs
+        mkdir -p {{OUTPUT_PATH}}/subs/subdomains
         cat {{DOMAINS_PATH}} | parallel -j32 --plus '
-          echo "[+] Subfinder Subdomain Enumeration: {}" >&2
-          subfinder -d {} -silent -t 200 -all | \
+          subfinder -d {} -silent -t 200 -all 2>/dev/null | \
           grep -v "*" | sort -u | \
-          anew {{OUTPUT_PATH}}/subs/{}.subfinder.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subfinder.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '
 
@@ -22,23 +22,22 @@ modules:
     cmds:
       - |
         cat {{DOMAINS_PATH}} | parallel -j32 --plus '
-          echo "[+] Chaos Subdomain Enumeration: {}" >&2
-          chaos -d {} -silent | \
+          chaos -d {} -silent 2>/dev/null | \
           grep -v "*" | sort -u | \
-          anew {{OUTPUT_PATH}}/subs/{}.chaos.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/subdomains/{}.chaos.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '
 
   - name: github_enum
     cmds:
       - |
+        mkdir -p {{OUTPUT_PATH}}/subs/tmp {{OUTPUT_PATH}}/subs/subdomains
         cat {{DOMAINS_PATH}} | parallel -j16 --plus '
-          echo "[+] Github Subdomains Enumeration: {}" >&2
-          github-subdomains -d {} -k -o {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null || true && \
-          cat {{OUTPUT_PATH}}/subs/{}.github.temp 2>/dev/null | grep -v "*" | sort -u | \
-          anew {{OUTPUT_PATH}}/subs/{}.github.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/{}.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/all.subs.txt && \
-          rm -f {{OUTPUT_PATH}}/subs/{}.github.temp
-        '
+          github-subdomains -d {} -k -o {{OUTPUT_PATH}}/subs/tmp/{}.github.temp || true &&
+          [ -s {{OUTPUT_PATH}}/subs/tmp/{}.github.temp ] && \
+          cat {{OUTPUT_PATH}}/subs/tmp/{}.github.temp | grep -v "*" | sort -u | \
+          anew {{OUTPUT_PATH}}/subs/subdomains/{}.github.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \
+          anew {{OUTPUT_PATH}}/subs/all.subs.txt || true && \
+          rm -f {{OUTPUT_PATH}}/subs/tmp/{}.github.temp'

@@ -8,10 +8,10 @@ modules:
   - name: subfinder_recursive_enum
     cmds:
       - |
-        echo "[*] Recursive Subfinder subdomain enumeration:)"
+        mkdir -p {{OUTPUT_PATH}}/subs/recursive
         cat {{OUTPUT_PATH}}/subs/all.subs.txt | sort -u | \
         parallel -j64 --plus '
-          subfinder -d {} -silent -t 100 -all | grep -v "*" | \
+          subfinder -d {} -silent -t 100 -all 2>/dev/null | grep -v "*" | \
           anew {{OUTPUT_PATH}}/subs/recursive/subfinder.recursive.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '
@@ -19,10 +19,9 @@ modules:
   - name: chaos_recursive_enum
     cmds:
       - |
-        echo "[*]  Recursive Chaos subdomain enumeration:)"
         cat {{OUTPUT_PATH}}/subs/all.subs.txt | sort -u | \
         parallel -j64 --plus '
-          chaos -d {} -silent | grep -v "*" | \
+          chaos -d {} -silent 2>/dev/null | grep -v "*" | \
           anew {{OUTPUT_PATH}}/subs/recursive/chaos.recursive.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/all.subs.txt
         '

@@ -1,0 +1,14 @@
+vars:
+  DOMAINS_PATH: "domains/domains.txt"
+  OUTPUT_PATH: "output"
+
+parallel: false
+modules:
+  - name: httpx_resolution
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/live
+        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
+        httpx -silent -threads 200 -o {{OUTPUT_PATH}}/subs/live/httpx.live.subs.txt -p 80,443,8080,8443,3000,8000,9000,5000,8888,8181 |  \
+        anew {{OUTPUT_PATH}}/subs/live/all.live.subs.txt \ 
+        rm -f {{OUTPUT_PATH}}/subs/live/httpx.live.subs.txt
