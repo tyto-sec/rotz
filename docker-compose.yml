@@ -14,5 +14,5 @@ services:
       [
         "sh",
         "-c",
-        "echo 'Like a dog without bone, an actor out on loan...' && exec /usr/sbin/sshd -D -e && rayder -w /app/workflow/main.yaml ",
+        "echo 'Like a dog without bone, an actor out on loan...' && exec /usr/sbin/sshd -D -e & rayder -w /app/workflows/main.yaml",
       ]
