@@ -7,7 +7,8 @@ modules:
   - name: url_enumeration
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/subs/{urls,tmp} &&
+        mkdir -p {{OUTPUT_PATH}}/subs/urls &&
+        mkdir -p {{OUTPUT_PATH}}/subs/tmp &&
         cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
         gau --threads 50 --timeout 15 \
             --o {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp &&
