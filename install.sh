@@ -72,6 +72,7 @@ apt-get update && apt-get install -y parallel && rm -rf /var/lib/apt/lists/*
 go install -v github.com/tomnomnom/anew@latest
 cp /root/go/bin/anew /usr/local/bin/anew
 
+
 ## Subdomain Enumeration Tools
 
 # Instala subfinder
@@ -90,12 +91,14 @@ cp /root/go/bin/github-subdomains /usr/local/bin/github-subdomains
 CGO_ENABLED=0 go install -v github.com/owasp-amass/amass/v5/cmd/amass@main
 cp /root/go/bin/amass /usr/local/bin/amass
 
+
 ## Subdomain Resolution
 
 # Instala httpx
 pip uninstall 'httpx[cli]'
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 cp /root/go/bin/httpx /usr/local/bin/httpx
+
 
 ## Subdomain Enumeration
 
@@ -113,14 +116,19 @@ echo 'export PATH=$PATH:/root/.local/bin' >> ~/.bashrc
 shodan init $SHODAN_API_KEY
 
 
+## DNS Enumeration
+
 # Instala o dnsx
 go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 cp /root/go/bin/dnsx /usr/local/bin/dnsx
 
-# Instala o nuclei
-go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
-cp /root/go/bin/nuclei /usr/local/bin/nuclei
-nuclei -update-templates
+
+## URL Enumeration
+go install github.com/lc/gau/v2/cmd/gau@latest
+cp /root/go/bin/gau /usr/local/bin/gau
+
+
+## JavaScript Enumeration
 
 # Instala o subjs
 go install -v github.com/lc/subjs@latest
@@ -144,6 +152,17 @@ mkdir -p /opt/Bug-Bounty-Toolz
 wget https://raw.githubusercontent.com/KingOfBugbounty/Bug-Bounty-Toolz/master/collector.py -O /opt/Bug-Bounty-Toolz/collector.py
 chmod +x /opt/Bug-Bounty-Toolz/collector.py
 ln -s /opt/Bug-Bounty-Toolz/collector.py /usr/local/bin/linkFinderCollector
+
+
+## Vulnerability Enumeration
+
+# Instala o nuclei
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+cp /root/go/bin/nuclei /usr/local/bin/nuclei
+nuclei -update-templates
+
+
+## Automation Tools
 
 # Instala o Rayder
 go install github.com/devanshbatham/rayder@v0.0.4

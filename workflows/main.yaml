@@ -11,8 +11,21 @@ modules:
   
   - name: recursive_subdomain_enum
     cmds:
-      - rayder -q -w workflows/subdomains/recursive_subdomain_enum.yaml DOMAINS_PATH={{DOMAINS_PATH}} OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/subdomains/recursive_subdomain_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}}
   
   - name: subdomain_resolution
     cmds:
-      - rayder -q -w workflows/subdomains/subdomain_resolution.yaml DOMAINS_PATH={{DOMAINS_PATH}} OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/subdomains/subdomain_resolution.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+
+  - name: dns_enum
+    cmds:
+      - rayder -q -w workflows/subdomains/dns_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+
+  - name: content_enumeration
+    cmds:
+      - rayder -q -w workflows/content/content_enumeration.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+
+  - name: infrastructure_enum
+    cmds:
+      - rayder -q -w workflows/infrastructure/infrastructure_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+  

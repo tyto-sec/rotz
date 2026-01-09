@@ -1,0 +1,16 @@
+vars:
+  OUTPUT_PATH: "output"
+
+parallel: false
+modules:
+
+  - name: url_enumeration
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/{urls,tmp} &&
+        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
+        gau --threads 50 --timeout 15 \
+            --o {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp &&
+        cat {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp | \
+        anew {{OUTPUT_PATH}}/subs/urls/all.urls.txt &&
+        rm -f {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp
