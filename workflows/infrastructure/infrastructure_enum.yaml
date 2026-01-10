@@ -29,3 +29,13 @@ modules:
         parallel -j20 --plus '
           shodan host {} 2>/dev/null | tee {{OUTPUT_PATH}}/ips/shodan/{}.shodan.txt
         '
+
+  - name: port_scan
+    cmds:
+      - |
+        #Uncomment the following lines to enable port scanning
+        #mkdir -p {{OUTPUT_PATH}}/ips/portscan
+        #cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
+        #parallel -j100 --plus '
+        #  naabu -silent -host {} -top-ports 10 -exclude-cdn -o {{OUTPUT_PATH}}/ips/portscan/{}.naabu.txt -rate 50 2>/dev/null
+        #'

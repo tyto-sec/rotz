@@ -35,9 +35,9 @@ export LANG=C.UTF-8
 echo 'export LC_ALL=C' >> ~/.bashrc
 
 # Variáveis de ambiente do Go para persistir
-echo 'export PDCP_API_KEY='$PDCP_API_KEY >> ~/.bashrc
-echo 'export GITHUB_TOKEN='$GITHUB_TOKEN >> ~/.bashrc
-echo 'export SHODAN_API_KEY='$SHODAN_API_KEY >> ~/.bashrc
+echo "export PDCP_API_KEY='${PDCP_API_KEY}'" >> ~/.bashrc
+echo "export GITHUB_TOKEN='${GITHUB_TOKEN}'" >> ~/.bashrc
+echo "export SHODAN_API_KEY='${SHODAN_API_KEY}'" >> ~/.bashrc
 
 # Adiciona ao profile para persistir
 echo "export GOROOT=/usr/local/go" >> /etc/profile
@@ -50,10 +50,13 @@ mkdir -p $GOPATH
 # Instala Python 3 e pip
 apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
+## Tools Installation
+
+# Instala nc
+apt-get update && apt-get install -y netcat-tradional && rm -rf /var/lib/apt/lists/*
+
 # Instala prips
 apt-get update && apt-get install -y prips && rm -rf /var/lib/apt/lists/*
-
-## Tools Installation
 
 # Instala dnsutils
 apt-get update && apt-get install -y dnsutils && rm -rf /var/lib/apt/lists/*
@@ -77,6 +80,11 @@ cp /root/go/bin/anew /usr/local/bin/anew
 # Instala chromium
 apt-get update && apt-get install -y chromium && rm -rf /var/lib/apt/lists/*
 
+# Instala libpcap-dev (dependência para algumas ferramentas Go)
+apt-get update && apt install -y libpcap-dev && rm -rf /var/lib/apt/lists/*
+
+# Instala unzip
+apt-get update && apt install -y unzip && rm -rf /var/lib/apt/lists/*
 
 ## Subdomain Enumeration Tools
 
@@ -100,7 +108,7 @@ cp /root/go/bin/amass /usr/local/bin/amass
 ## Subdomain Resolution
 
 # Instala httpx
-pip uninstall 'httpx[cli]'
+pip3 install --force-reinstall 'httpx[cli]' || true
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 cp /root/go/bin/httpx /usr/local/bin/httpx
 
@@ -111,6 +119,10 @@ cp /root/go/bin/httpx /usr/local/bin/httpx
 go install github.com/sensepost/gowitness@latest
 cp /root/go/bin/gowitness /usr/local/bin/gowitness
 
+# Instala aquatone
+wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_linux_amd64_1.7.0.zip
+unzip aquatone_linux_amd64_1.7.0.zip -d /usr/local/bin/
+rm aquatone_linux_amd64_1.7.0.zip
 
 ## Infrastructure Enumeration
 
@@ -123,6 +135,10 @@ shodan init $SHODAN_API_KEY
 # Instala metabigor
 go install github.com/j3ssie/metabigor@latest
 cp /root/go/bin/metabigor /usr/local/bin/metabigor
+
+# Instala naabu
+go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+cp /root/go/bin/naabu /usr/local/bin/naabu
 
 ## DNS Enumeration
 

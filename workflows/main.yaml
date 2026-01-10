@@ -42,4 +42,14 @@ modules:
     cmds:
       - echo "Recursive JavaScript Enumeration..."
 
-  
+  - name: xss_enum
+    cmds:
+      - echo "XSS Enumeration..."
+
+  - name: information_disclosure_enum
+    cmds:
+      - echo "Information Disclosure Enumeration..."
+
+  - name: param_enum
+    cmds:
+      - echo "Redirect and File Inclusion Enumeration..."
