@@ -1,6 +1,3 @@
-vars:
-  OUTPUT_PATH: "output"
-
 parallel: true
 modules:
 

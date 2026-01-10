@@ -1,6 +1,3 @@
-vars:
-  OUTPUT_PATH: "output"
-
 parallel: false
 modules:
 
@@ -30,6 +27,31 @@ modules:
         cat {{OUTPUT_PATH}}/subs/dns/all.dns.txt | \
         grep -E '\sCNAME\s' | anew {{OUTPUT_PATH}}/subs/dns/cname_records.dns.txt
   
+  - name: cname_records_filter
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/dns/cname_records.dns.txt | \
+        grep -iE "(elasticbeanstalk\.com|\
+        agilecrm\.com|airee\.ru|animaapp\.io|\
+        bitbucket\.io|furyns\.com|canny|\
+        campaign-monitor|cargo\.site|\
+        cloudapp\.(net|azure\.com)|azurewebsites\.net|\
+        blob\.core\.windows\.net|azure-api\.net|\
+        azure(hdinsight|edge|container)\.net|\
+        database\.windows\.net|azuredatalakestore\.net|\
+        search\.windows\.net|azurecr\.io|\
+        redis\.cache\.windows\.net|servicebus\.windows\.net|\
+        visualstudio\.com|trydiscourse\.com|\
+        hatenablog\.com|helpjuice\.com|\
+        helpscoutdocs\.com|helprace\.com|\
+        youtrack\.cloud|launchrock\.com|\
+        ngrok\.io|readme\.io|readthedocs\.io|\
+        s\.strikinglydns\.com|na-west1\.surge\.sh|\
+        surveysparrow\.com|stats\.uptimerobot\.com|\
+        wordpress\.com|worksites\.net|\
+        s3\.amazonaws|github\.io|herokuapp\.com)" 
+        anew {{OUTPUT_PATH}}/subs/dns/cname_records.filtered.dns.txt
+
   - name: cname_domains
     cmds:
       - |
@@ -37,3 +59,23 @@ modules:
         awk '/CNAME/ {print $1}' | \
         cut -d. -f1- | \
         sort -u | anew {{OUTPUT_PATH}}/subs/dns/cname_domains.txt 
+
+  - name: cname_filtered_domains
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/dns/cname_records.filtered.dns.txt | \
+        awk '/CNAME/ {print $1}' | \
+        cut -d. -f1- | \
+        sort -u | anew {{OUTPUT_PATH}}/subs/dns/cname_filtered_domains.txt
+
+  - name: revdns_enum
+    cmds:
+      - |
+        export ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH=go1.25
+        cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
+        hakrevdns -r 1.1.1.1 | \
+        anew {{OUTPUT_PATH}}/subs/dns/revdns.ip.lookup.txt | \ 
+        awk '{print $2}' | \
+        cut -d. -f1- | \
+        sort -u | anew {{OUTPUT_PATH}}/subs/subdomains/revdns.domains.txt | \
+        anew {{OUTPUT_PATH}}/subs/all.subs.txt

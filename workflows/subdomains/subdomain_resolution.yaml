@@ -1,6 +1,3 @@
-vars:
-  OUTPUT_PATH: "output"
-
 parallel: false
 modules:
   - name: httpx_resolution
@@ -11,6 +8,7 @@ modules:
         httpx -silent -threads 200 -o {{OUTPUT_PATH}}/subs/live/httpx.live.subs.txt -p 80,443,8080,8443,3000,8000,9000,5000,8888,8181 |  \
         anew {{OUTPUT_PATH}}/subs/live/all.live.subs.txt \ 
         rm -f {{OUTPUT_PATH}}/subs/live/httpx.live.subs.txt
+  
   - name: gowitness_enumeration
     cmds:
       - |

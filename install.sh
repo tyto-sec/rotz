@@ -50,6 +50,8 @@ mkdir -p $GOPATH
 # Instala Python 3 e pip
 apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
+# Instala prips
+apt-get update && apt-get install -y prips && rm -rf /var/lib/apt/lists/*
 
 ## Tools Installation
 
@@ -71,6 +73,9 @@ apt-get update && apt-get install -y parallel && rm -rf /var/lib/apt/lists/*
 # Instala o anew
 go install -v github.com/tomnomnom/anew@latest
 cp /root/go/bin/anew /usr/local/bin/anew
+
+# Instala chromium
+apt-get update && apt-get install -y chromium && rm -rf /var/lib/apt/lists/*
 
 
 ## Subdomain Enumeration Tools
@@ -115,12 +120,19 @@ export PATH=$PATH:/root/.local/bin
 echo 'export PATH=$PATH:/root/.local/bin' >> ~/.bashrc
 shodan init $SHODAN_API_KEY
 
+# Instala metabigor
+go install github.com/j3ssie/metabigor@latest
+cp /root/go/bin/metabigor /usr/local/bin/metabigor
 
 ## DNS Enumeration
 
 # Instala o dnsx
 go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 cp /root/go/bin/dnsx /usr/local/bin/dnsx
+
+# Instala o hakrevdns
+go install github.com/hakluke/hakrevdns@latest
+cp /root/go/bin/hakrevdns /usr/local/bin/hakrevdns
 
 
 ## URL Enumeration

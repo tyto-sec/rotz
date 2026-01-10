@@ -1,6 +1,3 @@
-vars:
-  OUTPUT_PATH: "output"
-
 parallel: false
 modules:
 
@@ -10,13 +7,25 @@ modules:
         mkdir -p {{OUTPUT_PATH}}/ips
         cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
         parallel -j50 'host {} 2>/dev/null | grep "has address" | tail -1 | awk "{print \$4}"' | \
-        grep -v '^$' | anew {{OUTPUT_PATH}}/ips/all.resolved.ips.txt
+        grep -v '^$' | anew {{OUTPUT_PATH}}/ips/all.resolved.ips.txt | anew {{OUTPUT_PATH}}/ips/all.ips.txt
+
+  - name: asn_discovery
+    cmds:
+    - |
+      #echo '{{ORGANIZATION}}' | \
+      #metabigor net --org -v | \
+      #awk '{print $3}' | \
+      #sed 's/[[0-9]]\+\.//g' | \
+      #xargs -I@ sh -c 'prips @' | \
+      #anew {{OUTPUT_PATH}}/ips/asn.ips.txt | \
+      #anew {{OUTPUT_PATH}}/ips/all.ips.txt
+
 
   - name: shodan_enum
     cmds:
       - |
         mkdir -p {{OUTPUT_PATH}}/ips/shodan
-        cat {{OUTPUT_PATH}}/ips/all.resolved.ips.txt | \
+        cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
         parallel -j20 --plus '
           shodan host {} 2>/dev/null | tee {{OUTPUT_PATH}}/ips/shodan/{}.shodan.txt
         '
