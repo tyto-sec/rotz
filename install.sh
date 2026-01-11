@@ -174,6 +174,7 @@ pip install .
 
 # Instala o unfurl
 go install github.com/tomnomnom/unfurl@latest
+cp /root/go/bin/unfurl /usr/local/bin/unfurl
 
 
 ## JavaScript Enumeration
