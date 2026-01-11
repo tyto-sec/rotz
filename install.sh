@@ -152,8 +152,28 @@ cp /root/go/bin/hakrevdns /usr/local/bin/hakrevdns
 
 
 ## URL Enumeration
+
+# Instala o gau
 go install github.com/lc/gau/v2/cmd/gau@latest
 cp /root/go/bin/gau /usr/local/bin/gau
+
+# Instala o gf
+go install github.com/tomnomnom/gf@latest
+cp /root/go/bin/gf /usr/local/bin/gf
+mkdir -p ~/.gf
+cp -r $GOPATH/pkg/mod/github.com/tomnomnom/gf@v0.0.0-20200618134122-dcd4c361f9f5/examples ~/.gf
+echo 'source $GOPATH/pkg/mod/github.com/tomnomnom/gf@v0.0.0-20200618134122-dcd4c361f9f5/gf-completion.bash' >> ~/.bashrc
+git clone https://github.com/1ndianl33t/Gf-Patterns /tmp/Gf-Patterns
+mv /tmp/Gf-Patterns/*.json ~/.gf
+rm -rf /tmp/Gf-Patterns
+
+# Instala o paramspider
+git clone https://github.com/devanshbatham/paramspider /opt/paramspider
+cd /opt/paramspider
+pip install .
+
+# Instala o unfurl
+go install github.com/tomnomnom/unfurl@latest
 
 
 ## JavaScript Enumeration

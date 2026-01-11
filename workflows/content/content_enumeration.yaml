@@ -1,7 +1,7 @@
 parallel: false
 modules:
 
-  - name: url_enumeration
+  - name: gau_enum
     cmds:
       - |
         mkdir -p {{OUTPUT_PATH}}/subs/urls &&
@@ -12,3 +12,16 @@ modules:
         cat {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp | \
         anew {{OUTPUT_PATH}}/subs/urls/all.urls.txt &&
         rm -f {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp
+
+  - name: paramspider_enum
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/urls/paramspider &&
+        paramspider -l {{OUTPUT_PATH}}/subs/all.subs.txt  &&
+        cp -r results/* {{OUTPUT_PATH}}/subs/urls/paramspider/ &&
+        rm -rf results &&
+        cat {{OUTPUT_PATH}}/subs/urls/paramspider/* | anew {{OUTPUT_PATH}}/subs/urls/all.urls.txt
+
+  - name: unfurl_enum
+    cmds:
+      - echo "Unfurl Paths, Keys, Values, KeyPairs, Domains and Apex Domains from the URLs"

@@ -52,4 +52,4 @@ modules:
 
   - name: param_enum
     cmds:
-      - echo "Redirect and File Inclusion Enumeration..."
+      - echo "Redirect and File Inclusion Enumeration... (use gf patterns later...)"
