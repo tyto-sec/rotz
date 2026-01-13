@@ -71,11 +71,13 @@ modules:
   - name: revdns_enum
     cmds:
       - |
-        export ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH=go1.25
         cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
         hakrevdns -r 1.1.1.1 | \
-        anew {{OUTPUT_PATH}}/subs/dns/revdns.ip.lookup.txt | \ 
+        anew {{OUTPUT_PATH}}/subs/dns/revdns.ip.lookup.txt && \
+        cat {{OUTPUT_PATH}}/subs/dns/revdns.ip.lookup.txt |\
         awk '{print $2}' | \
+        sed 's/\.$//' | \
         cut -d. -f1- | \
-        sort -u | anew {{OUTPUT_PATH}}/subs/subdomains/revdns.domains.txt | \
+        sort -u | \
+        anew {{OUTPUT_PATH}}/subs/subdomains/revdns.domains.txt | \
         anew {{OUTPUT_PATH}}/subs/all.subs.txt

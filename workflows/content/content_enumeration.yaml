@@ -20,8 +20,43 @@ modules:
         paramspider -l {{OUTPUT_PATH}}/subs/all.subs.txt  &&
         cp -r results/* {{OUTPUT_PATH}}/subs/urls/paramspider/ &&
         rm -rf results &&
-        cat {{OUTPUT_PATH}}/subs/urls/paramspider/* | anew {{OUTPUT_PATH}}/subs/urls/all.urls.txt
+        cat {{OUTPUT_PATH}}/subs/urls/paramspider/* | anew {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt
+
+  - name: httpx_resolution
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | \
+        httpx -silent -threads 100 -o {{OUTPUT_PATH}}/subs/urls/all.live.urls.txt && 
+        cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt | \
+        httpx -silent -threads 100 -o {{OUTPUT_PATH}}/subs/urls/all.paramspider.live.urls.txt &&
+        cat {{OUTPUT_PATH}}/subs/urls/all.live.urls.txt | grep '?' >> {{OUTPUT_PATH}}/subs/urls/all.parameters.urls.txt &&
+        cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.live.urls.txt | grep '?' >> {{OUTPUT_PATH}}/subs/urls/all.parameters.urls.txt &&
+        cat {{OUTPUT_PATH}}/subs/urls/all.parameters.urls.txt | \
+        sed 's/\?.*//' | \
+        sort -u | \
+        anew {{OUTPUT_PATH}}/subs/urls/clean.parameters.urls.txt
+
+  - name: arjun_enum
+    cmds:
+      - |
+        cat {{OUTPUT_PATH}}/subs/urls/all.live.urls.txt | \
+        mkdir -p {{OUTPUT_PATH}}/subs/urls/arjun &&
+        arjun -i {{OUTPUT_PATH}}/subs/urls/clean.parameters.urls.txt -oT {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt 
 
   - name: unfurl_enum
     cmds:
-      - echo "Unfurl Paths, Keys, Values, KeyPairs, Domains and Apex Domains from the URLs"
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/parameters &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u keys | anew {{OUTPUT_PATH}}/subs/parameters/all.keys.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt | unfurl -u keys | anew {{OUTPUT_PATH}}/subs/parameters/all.keys.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt | unfurl -u keys | anew {{OUTPUT_PATH}}/subs/parameters/all.keys.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u values | anew {{OUTPUT_PATH}}/subs/parameters/all.values.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u keypairs | anew {{OUTPUT_PATH}}/subs/parameters/all.keypairs.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u domains | anew {{OUTPUT_PATH}}/subs/parameters/all.domains.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/parameters/all.domains.txt ] && cat {{OUTPUT_PATH}}/subs/parameters/all.domains.txt | anew {{OUTPUT_PATH}}/subs/all.subs.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u apexes | anew {{OUTPUT_PATH}}/subs/parameters/all.apex.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u paths | anew {{OUTPUT_PATH}}/subs/parameters/all.paths.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt | unfurl -u paths | anew {{OUTPUT_PATH}}/subs/parameters/all.paths.txt || true &&
+        [ -f {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt | unfurl -u paths | anew {{OUTPUT_PATH}}/subs/parameters/all.paths.txt || true
+
+

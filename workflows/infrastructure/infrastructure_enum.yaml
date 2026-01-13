@@ -8,17 +8,19 @@ modules:
         cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
         parallel -j50 'host {} 2>/dev/null | grep "has address" | tail -1 | awk "{print \$4}"' | \
         grep -v '^$' | anew {{OUTPUT_PATH}}/ips/all.resolved.ips.txt | anew {{OUTPUT_PATH}}/ips/all.ips.txt
+  
+  ##### Validate if the scope allows all of they ASN IPs before enabling this module #####
 
-  - name: asn_discovery
-    cmds:
-    - |
-      #echo '{{ORGANIZATION}}' | \
-      #metabigor net --org -v | \
-      #awk '{print $3}' | \
-      #sed 's/[[0-9]]\+\.//g' | \
-      #xargs -I@ sh -c 'prips @' | \
-      #anew {{OUTPUT_PATH}}/ips/asn.ips.txt | \
-      #anew {{OUTPUT_PATH}}/ips/all.ips.txt
+  # - name: asn_discovery
+  #   cmds:
+  #   - |
+  #     echo '{{ORGANIZATION}}' | \
+  #     metabigor net --org -v | \
+  #     awk '{print $3}' | \
+  #     sed 's/[[0-9]]\+\.//g' | \
+  #     xargs -I@ sh -c 'prips @' | \
+  #     anew {{OUTPUT_PATH}}/ips/asn.ips.txt | \
+  #     anew {{OUTPUT_PATH}}/ips/all.ips.txt
 
 
   - name: shodan_enum
@@ -30,12 +32,13 @@ modules:
           shodan host {} 2>/dev/null | tee {{OUTPUT_PATH}}/ips/shodan/{}.shodan.txt
         '
 
-  - name: port_scan
-    cmds:
-      - |
-        #Uncomment the following lines to enable port scanning
-        #mkdir -p {{OUTPUT_PATH}}/ips/portscan
-        #cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
-        #parallel -j100 --plus '
-        #  naabu -silent -host {} -top-ports 10 -exclude-cdn -o {{OUTPUT_PATH}}/ips/portscan/{}.naabu.txt -rate 50 2>/dev/null
-        #'
+  ##### Validate if the scope allows port scanning before enabling this module #####
+  
+  # - name: port_scan
+  #   cmds:
+  #     - |
+  #       mkdir -p {{OUTPUT_PATH}}/ips/portscan
+  #       cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
+  #       parallel -j100 --plus '
+  #         naabu -silent -host {} -top-ports 10 -exclude-cdn -o {{OUTPUT_PATH}}/ips/portscan/{}.naabu.txt -rate 50 2>/dev/null
+  #       '

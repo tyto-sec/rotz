@@ -6,8 +6,8 @@ modules:
       - |
         mkdir -p {{OUTPUT_PATH}}/subs
         mkdir -p {{OUTPUT_PATH}}/subs/subdomains
-        cat {{DOMAINS_PATH}} | parallel -j32 --plus '
-          subfinder -d {} -silent -t 200 -all 2>/dev/null | \
+        cat {{DOMAINS_PATH}} | parallel -j16 --plus '
+          subfinder -d {} -silent 2>/dev/null | \
           grep -v "*" | sort -u | \
           anew {{OUTPUT_PATH}}/subs/subdomains/{}.subfinder.subs.txt | \
           anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \

@@ -1,6 +1,6 @@
 vars:
-  DOMAINS_PATH: "domains/domains.txt"
-  OUTPUT_PATH: "output"
+  DOMAINS_PATH: "/app/domains/domains.txt"
+  OUTPUT_PATH: "/app/output"
   ORGANIZATION: "nasa"
 
 parallel: false
@@ -34,6 +34,10 @@ modules:
     cmds:
       - echo "Recursive JavaScript Enumeration..."
 
+  - name: first_fuzzing
+    cmds:
+      - echo "First Level Fuzzing..."
+
   - name: recursive_content_enum
     cmds:
       - echo "Recursive Content Enumeration..."
@@ -41,6 +45,10 @@ modules:
   - name: recursive_javascript_enum
     cmds:
       - echo "Recursive JavaScript Enumeration..."
+
+  - name: second_fuzzing
+    cmds:
+      - echo "Second Level Fuzzing..."
 
   - name: xss_enum
     cmds:

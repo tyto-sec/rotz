@@ -50,7 +50,10 @@ mkdir -p $GOPATH
 # Instala Python 3 e pip
 apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
-## Tools Installation
+#Instala pipx
+apt update && apt install -y pipx && rm -rf /var/lib/apt/lists/*
+
+##### Tools Installation ##### 
 
 # Instala nc
 apt-get update && apt-get install -y netcat-tradional && rm -rf /var/lib/apt/lists/*
@@ -86,7 +89,8 @@ apt-get update && apt install -y libpcap-dev && rm -rf /var/lib/apt/lists/*
 # Instala unzip
 apt-get update && apt install -y unzip && rm -rf /var/lib/apt/lists/*
 
-## Subdomain Enumeration Tools
+
+##### Subdomain Enumeration Tools #####
 
 # Instala subfinder
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
@@ -105,7 +109,7 @@ CGO_ENABLED=0 go install -v github.com/owasp-amass/amass/v5/cmd/amass@main
 cp /root/go/bin/amass /usr/local/bin/amass
 
 
-## Subdomain Resolution
+##### Subdomain Resolution #####
 
 # Instala httpx
 pip3 install --force-reinstall 'httpx[cli]' || true
@@ -113,7 +117,7 @@ go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 cp /root/go/bin/httpx /usr/local/bin/httpx
 
 
-## Subdomain Enumeration
+##### Screenshots #####
 
 # Instala gowitness
 go install github.com/sensepost/gowitness@latest
@@ -124,7 +128,8 @@ wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_
 unzip aquatone_linux_amd64_1.7.0.zip -d /usr/local/bin/
 rm aquatone_linux_amd64_1.7.0.zip
 
-## Infrastructure Enumeration
+
+##### Infrastructure  #####
 
 # Instala Shodan
 pip install -U --user shodan
@@ -140,7 +145,8 @@ cp /root/go/bin/metabigor /usr/local/bin/metabigor
 go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 cp /root/go/bin/naabu /usr/local/bin/naabu
 
-## DNS Enumeration
+
+##### DNS Enumeration #####
 
 # Instala o dnsx
 go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
@@ -151,7 +157,7 @@ go install github.com/hakluke/hakrevdns@latest
 cp /root/go/bin/hakrevdns /usr/local/bin/hakrevdns
 
 
-## URL Enumeration
+##### URL Enumeration #####
 
 # Instala o gau
 go install github.com/lc/gau/v2/cmd/gau@latest
@@ -176,8 +182,15 @@ pip install .
 go install github.com/tomnomnom/unfurl@latest
 cp /root/go/bin/unfurl /usr/local/bin/unfurl
 
+# Instala o arjun
+pipx install arjun
 
-## JavaScript Enumeration
+# Instala o qsreplace
+go install github.com/tomnomnom/qsreplace@latest
+cp /root/go/bin/qsreplace /usr/local/bin/qsreplace
+
+
+##### JavaScript Enumeration #####
 
 # Instala o subjs
 go install -v github.com/lc/subjs@latest
@@ -203,7 +216,8 @@ chmod +x /opt/Bug-Bounty-Toolz/collector.py
 ln -s /opt/Bug-Bounty-Toolz/collector.py /usr/local/bin/linkFinderCollector
 
 
-## Vulnerability Enumeration
+
+##### Vulnerability Scan #####
 
 # Instala o nuclei
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
@@ -211,7 +225,7 @@ cp /root/go/bin/nuclei /usr/local/bin/nuclei
 nuclei -update-templates
 
 
-## Automation Tools
+##### Automation Tools #####
 
 # Instala o Rayder
 go install github.com/devanshbatham/rayder@v0.0.4
