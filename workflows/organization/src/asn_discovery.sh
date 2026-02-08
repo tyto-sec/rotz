@@ -4,6 +4,7 @@ set -euo pipefail
 asn_discovery() {
     local organization="${1:-}"
     local output_path="${2:-${OUTPUT_PATH:-output}}"
+    local notify_enabled="${3:-false}"
     if [[ -z "${organization}" ]]; then
         echo "Usage: asn_discovery <organization> [output_path]" >&2
         return 1
@@ -47,7 +48,7 @@ for line in sys.stdin:
     fi
 
     if [[ -s "${newly_discovered_file}" ]]; then
-        if command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+        if [[ "${notify_enabled}" == "true" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
             {
                 echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New ASN IPs\n"
                 cat "${newly_discovered_file}"

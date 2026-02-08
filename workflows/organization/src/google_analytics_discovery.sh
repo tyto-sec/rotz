@@ -4,6 +4,7 @@ set -euo pipefail
 google_analytics_discovery() {
 	local domains_file="${1:-}"
 	local output_path="${2:-${OUTPUT_PATH:-output}}"
+	local notify_enabled="${3:-false}"
 	if [[ -z "${domains_file}" ]]; then
 		echo "Usage: google_analytics_discovery <domains_file> [output_path]" >&2
 		return 1
@@ -42,7 +43,7 @@ google_analytics_discovery() {
 	fi
 
 	if [[ -s "${newly_discovered_file}" ]]; then
-		if command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+		if [[ "${notify_enabled}" == "true" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
 			{
 				echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New Google Analytics Domains\n"
 				cat "${newly_discovered_file}"

@@ -17,6 +17,7 @@ RUN ansible-playbook /tmp/playbook.yml -c local && \
 
 COPY config/subfinder/provider-config.yaml /root/.config/subfinder/provider-config.yaml
 COPY config/notify/provider-config.yaml /root/.config/notify/provider-config.yaml
+COPY config/puredns/resolvers.txt /root/.config/puredns/resolvers.txt
 
 WORKDIR /app
 

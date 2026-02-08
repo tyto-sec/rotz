@@ -32,6 +32,7 @@
           - parallel
           - chromium
           - libpcap-dev
+          - nano
         state: present
         update_cache: yes
 
@@ -62,6 +63,15 @@
           export LANG=C.UTF-8
         mode: '0644'
 
+    - name: Install MassDNS from source
+      shell: |
+        git clone https://github.com/blechschmidt/massdns.git /opt/massdns
+        cd /opt/massdns
+        make
+        make install
+      args:
+        creates: /usr/local/bin/massdns
+
     - name: Install Go Tools (ProjectDiscovery and others)
       shell: "/usr/local/go/bin/go install -v {{ item }}@latest"
       environment:
@@ -87,6 +97,7 @@
         - github.com/projectdiscovery/nuclei/v3/cmd/nuclei
         - github.com/devanshbatham/rayder
         - github.com/projectdiscovery/notify/cmd/notify
+        - github.com/d3mondev/puredns/v2
       register: go_install_result
       changed_when: "'installed' in go_install_result.stdout"
 

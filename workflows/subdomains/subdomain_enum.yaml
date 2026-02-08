@@ -1,18 +1,24 @@
 vars:
   OUTPUT_PATH: output/tesla
   DOMAINS: input/tesla/domains.txt
+  NOTIFY: true
+  WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
 
 parallel: true
 modules:
 
   - name: subfinder_enum
     cmds:
-      - bash workflows/subdomains/src/subfinder_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/subdomains/src/subfinder_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
   
   - name: chaos_enum
     cmds:
-      - bash workflows/subdomains/src/chaos_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/subdomains/src/chaos_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
 
   - name: github_enum
     cmds:
-      - bash workflows/subdomains/src/github_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/subdomains/src/github_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+
+  - name: puredns_enum
+    cmds:
+      - bash workflows/subdomains/src/puredns_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' '{{WORDLIST}}'
