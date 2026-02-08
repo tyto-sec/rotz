@@ -15,8 +15,13 @@ asn_discovery() {
     local all_ips_file="${ips_dir}/all.ips.txt"
     local new_asn_ips_file=""
     local newly_discovered_file=""
+    local first_run=false
 
     mkdir -p "${ips_dir}"
+
+    if [[ ! -s "${asn_ips_file}" ]]; then
+        first_run=true
+    fi
 
     new_asn_ips_file="$(mktemp)"
     newly_discovered_file="$(mktemp)"
@@ -48,7 +53,7 @@ for line in sys.stdin:
     fi
 
     if [[ -s "${newly_discovered_file}" ]]; then
-        if [[ "${notify_enabled}" == "true" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+        if [[ "${notify_enabled}" == "true" ]] && [[ "${first_run}" == "false" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
             {
                 echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New ASN IPs\n"
                 cat "${newly_discovered_file}"

@@ -1,44 +1,29 @@
+vars:
+  OUTPUT_PATH: output/tesla
+  IPS: input/tesla/ips.txt
+  NOTIFY: true
+  WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
+  SUBDOMAINS: output/tesla/subs/subdomains/all.subs.txt
+
 parallel: false
 modules:
 
-  - name: ip_resolution
+  - name: create_dirs
     cmds:
       - |
         mkdir -p {{OUTPUT_PATH}}/ips
-        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
-        parallel -j50 'host {} 2>/dev/null | grep "has address" | tail -1 | awk "{print \$4}"' | \
-        grep -v '^$' | anew {{OUTPUT_PATH}}/ips/all.resolved.ips.txt | anew {{OUTPUT_PATH}}/ips/all.ips.txt
-  
-  ##### Validate if the scope allows all of they ASN IPs before enabling this module #####
+        touch {{OUTPUT_PATH}}/ips/all.ips.txt
 
-  # - name: asn_discovery
-  #   cmds:
-  #   - |
-  #     echo '{{ORGANIZATION}}' | \
-  #     metabigor net --org -v | \
-  #     awk '{print $3}' | \
-  #     sed 's/[[0-9]]\+\.//g' | \
-  #     xargs -I@ sh -c 'prips @' | \
-  #     anew {{OUTPUT_PATH}}/ips/asn.ips.txt | \
-  #     anew {{OUTPUT_PATH}}/ips/all.ips.txt
-
-
-  - name: shodan_enum
+  - name: copy_ips
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/ips/shodan
-        cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
-        parallel -j20 --plus '
-          shodan host {} 2>/dev/null | tee {{OUTPUT_PATH}}/ips/shodan/{}.shodan.txt
-        '
+        mkdir -p {{OUTPUT_PATH}}/ips
+        cat {{IPS}} | anew {{OUTPUT_PATH}}/ips/all.ips.txt
 
-  ##### Validate if the scope allows port scanning before enabling this module #####
-  
-  # - name: port_scan
-  #   cmds:
-  #     - |
-  #       mkdir -p {{OUTPUT_PATH}}/ips/portscan
-  #       cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
-  #       parallel -j100 --plus '
-  #         naabu -silent -host {} -top-ports 10 -exclude-cdn -o {{OUTPUT_PATH}}/ips/portscan/{}.naabu.txt -rate 50 2>/dev/null
-  #       '
+  - name: subdomain_resolution
+    cmds:
+      - bash workflows/infrastructure/src/subdomain_resolution.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+
+  - name: sdlookup_enum
+    cmds:
+      - bash workflows/infrastructure/src/portscan_sdlookup.sh '{{OUTPUT_PATH}}/ips/all.ips.txt' '{{OUTPUT_PATH}}' '{{NOTIFY}}'

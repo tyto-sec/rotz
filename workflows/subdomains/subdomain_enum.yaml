@@ -4,8 +4,14 @@ vars:
   NOTIFY: true
   WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
 
-parallel: true
+parallel: false
 modules:
+
+  - name: create_dirs
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/subdomains
+        touch {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt
 
   - name: subfinder_enum
     cmds:
@@ -22,3 +28,7 @@ modules:
   - name: puredns_enum
     cmds:
       - bash workflows/subdomains/src/puredns_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' '{{WORDLIST}}'
+
+  - name: clean_all_subs
+    cmds:
+      - python3 workflows/subdomains/src/clean_domains.py {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt

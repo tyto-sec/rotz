@@ -27,8 +27,13 @@ google_analytics_discovery() {
 	local all_ga_file="${ga_dir}/all.subs.txt"
 	local new_ga_file=""
 	local newly_discovered_file=""
+	local first_run=false
 
 	mkdir -p "${ga_dir}"
+
+	if [[ ! -s "${ga_file}" ]]; then
+		first_run=true
+	fi
 
 	new_ga_file="$(mktemp)"
 	newly_discovered_file="$(mktemp)"
@@ -43,7 +48,7 @@ google_analytics_discovery() {
 	fi
 
 	if [[ -s "${newly_discovered_file}" ]]; then
-		if [[ "${notify_enabled}" == "true" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+		if [[ "${notify_enabled}" == "true" ]] && [[ "${first_run}" == "false" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
 			{
 				echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New Google Analytics Domains\n"
 				cat "${newly_discovered_file}"

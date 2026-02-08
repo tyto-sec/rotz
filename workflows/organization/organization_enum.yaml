@@ -2,10 +2,17 @@ vars:
   ORGANIZATION: "tesla"
   OUTPUT_PATH: output/tesla
   DOMAINS: input/tesla/domains.txt
-  NOTIFY: false
+  NOTIFY: true
 
-parallel: true
+parallel: false
 modules:
+
+  - name: create_dirs
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/subs/subdomains
+        touch {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt
+        touch {{OUTPUT_PATH}}/ips/all.ips.txt
 
   - name: asn_discovery
     cmds:
@@ -14,7 +21,7 @@ modules:
   - name: certs_discovery
     cmds:
       - bash workflows/organization/src/certs_discovery.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
-      
+
   - name: google_analytics_discovery
     cmds:
       - bash workflows/organization/src/google_analytics_discovery.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'

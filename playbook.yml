@@ -98,6 +98,7 @@
         - github.com/devanshbatham/rayder
         - github.com/projectdiscovery/notify/cmd/notify
         - github.com/d3mondev/puredns/v2
+        - github.com/j3ssie/sdlookup
       register: go_install_result
       changed_when: "'installed' in go_install_result.stdout"
 

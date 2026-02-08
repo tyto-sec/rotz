@@ -41,8 +41,13 @@ puredns_enum() {
 	local new_subs_file=""
 	local newly_discovered_file=""
 	local raw_subs_file=""
+	local first_run=false
 
 	mkdir -p "${subs_dir}"
+
+	if [[ ! -s "${subs_file}" ]]; then
+		first_run=true
+	fi
 
 	new_subs_file="$(mktemp)"
 	newly_discovered_file="$(mktemp)"
@@ -66,7 +71,7 @@ puredns_enum() {
 	fi
 
 	if [[ -s "${newly_discovered_file}" ]]; then
-		if [[ "${notify_enabled}" == "true" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+		if [[ "${notify_enabled}" == "true" ]] && [[ "${first_run}" == "false" ]] && command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
 			{
 				echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New Subdomains (PureDNS)\n"
 				cat "${newly_discovered_file}"
