@@ -86,6 +86,7 @@
         - github.com/lc/subjs
         - github.com/projectdiscovery/nuclei/v3/cmd/nuclei
         - github.com/devanshbatham/rayder
+        - github.com/projectdiscovery/notify/cmd/notify
       register: go_install_result
       changed_when: "'installed' in go_install_result.stdout"
 

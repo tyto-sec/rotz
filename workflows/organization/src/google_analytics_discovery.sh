@@ -42,10 +42,12 @@ google_analytics_discovery() {
 	fi
 
 	if [[ -s "${newly_discovered_file}" ]]; then
-        # {
-		# 	echo "[$(date '+%Y-%m-%d %H:%M:%S')] New Certs Domains"
-		# 	cat "${newly_discovered_file}"
-		# } | notify -bulk -provider telegram
+		if command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+			{
+				echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New Google Analytics Domains\n"
+				cat "${newly_discovered_file}"
+			} | notify -bulk -provider telegram || true
+		fi
 		cat "${newly_discovered_file}" | anew "${all_ga_file}"
 	fi
 

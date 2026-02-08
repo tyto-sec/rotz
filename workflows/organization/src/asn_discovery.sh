@@ -47,10 +47,12 @@ for line in sys.stdin:
     fi
 
     if [[ -s "${newly_discovered_file}" ]]; then
-        # {
-        #     echo "[$(date '+%Y-%m-%d %H:%M:%S')] New ASN IPs"
-        #     cat "${newly_discovered_file}"
-        # } | notify -bulk -provider telegram
+        if command -v notify >/dev/null 2>&1 && [[ -f "${HOME}/.config/notify/provider-config.yaml" ]]; then
+            {
+                echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] New ASN IPs\n"
+                cat "${newly_discovered_file}"
+            } | notify -bulk -provider telegram || true
+        fi
         cat "${newly_discovered_file}" | anew "${all_ips_file}"
     fi
 
