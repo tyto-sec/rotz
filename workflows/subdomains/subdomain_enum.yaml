@@ -1,39 +1,18 @@
+vars:
+  OUTPUT_PATH: output/tesla
+  DOMAINS: domains/domains.txt
+
 parallel: true
 modules:
 
-  - name: subfinder_enum
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs
-        mkdir -p {{OUTPUT_PATH}}/subs/subdomains
-        cat {{DOMAINS_PATH}} | parallel -j16 --plus '
-          subfinder -d {} -silent 2>/dev/null | \
-          grep -v "*" | sort -u | \
-          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subfinder.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/all.subs.txt
-        '
-
-  - name: chaos_enum
-    cmds:
-      - |
-        cat {{DOMAINS_PATH}} | parallel -j32 --plus '
-          chaos -d {} -silent 2>/dev/null | \
-          grep -v "*" | sort -u | \
-          anew {{OUTPUT_PATH}}/subs/subdomains/{}.chaos.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/all.subs.txt
-        '
+  # - name: subfinder_enum
+  #   cmds:
+  #     - bash workflows/subdomains/src/subfinder_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+  
+  # - name: chaos_enum
+  #   cmds:
+  #     - bash workflows/subdomains/src/chaos_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
 
   - name: github_enum
     cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/tmp {{OUTPUT_PATH}}/subs/subdomains
-        cat {{DOMAINS_PATH}} | parallel -j16 --plus '
-          github-subdomains -d {} -k -o {{OUTPUT_PATH}}/subs/tmp/{}.github.temp || true &&
-          [ -s {{OUTPUT_PATH}}/subs/tmp/{}.github.temp ] && \
-          cat {{OUTPUT_PATH}}/subs/tmp/{}.github.temp | grep -v "*" | sort -u | \
-          anew {{OUTPUT_PATH}}/subs/subdomains/{}.github.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/subdomains/{}.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/all.subs.txt || true && \
-          rm -f {{OUTPUT_PATH}}/subs/tmp/{}.github.temp'
+      - bash workflows/subdomains/src/github_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'

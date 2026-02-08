@@ -1,23 +1,13 @@
+vars:
+  OUTPUT_PATH: output/tesla
+
 parallel: true
 modules:
 
   - name: subfinder_recursive_enum
     cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/recursive
-        cat {{OUTPUT_PATH}}/subs/all.subs.txt | sort -u | \
-        parallel -j64 --plus '
-          subfinder -d {} -silent -t 100 -all 2>/dev/null | grep -v "*" | \
-          anew {{OUTPUT_PATH}}/subs/recursive/subfinder.recursive.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/all.subs.txt
-        '
+      - bash workflows/subdomains/src/subfinder_enum.sh '{{OUTPUT_PATH}}/subs/all.subs.txt' '{{OUTPUT_PATH}}'
   
   - name: chaos_recursive_enum
     cmds:
-      - |
-        cat {{OUTPUT_PATH}}/subs/all.subs.txt | sort -u | \
-        parallel -j64 --plus '
-          chaos -d {} -silent 2>/dev/null | grep -v "*" | \
-          anew {{OUTPUT_PATH}}/subs/recursive/chaos.recursive.subs.txt | \
-          anew {{OUTPUT_PATH}}/subs/all.subs.txt
-        '
+      - bash workflows/subdomains/src/chaos_enum.sh '{{OUTPUT_PATH}}/subs/all.subs.txt' '{{OUTPUT_PATH}}'

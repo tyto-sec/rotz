@@ -1,5 +1,0 @@
-vars:
-  GITHUB_ORG: "teslamotors"
-
-parallel: true
-modules:
