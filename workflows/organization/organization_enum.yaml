@@ -1,0 +1,19 @@
+vars:
+  ORGANIZATION: "tesla"
+  OUTPUT_PATH: output/tesla
+  DOMAINS: domains/domains.txt
+
+parallel: true
+modules:
+
+  - name: asn_discovery
+    cmds:
+      - bash workflows/organization/src/asn_discovery.sh '{{ORGANIZATION}}' '{{OUTPUT_PATH}}'
+  
+  - name: certs_discovery
+    cmds:
+      - bash workflows/organization/src/certs_discovery.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+
+  - name: google_analytics_discovery
+    cmds:
+      - bash workflows/organization/src/google_analytics_discovery.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'

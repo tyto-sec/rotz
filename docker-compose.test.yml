@@ -1,20 +1,18 @@
 version: "3.8"
 
 services:
-  rayders-on-the-storm:
-    build: .
+  test-environment:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: hunter_debug
     env_file:
       - .env
-    ports:
-      - "2222:22"
     volumes:
       - ./domains:/app/domains
       - ./workflows:/app/workflows
       - ./wordlists:/app/wordlists
       - ./output:/app/output
-    command:
-      [
-        "sh",
-        "-c",
-        "echo 'Like a dog without bone, an actor out on loan...' && exec /usr/sbin/sshd -D -e",
-      ]
+    stdin_open: true
+    tty: true
+    command: /bin/bash

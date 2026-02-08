@@ -5,16 +5,10 @@ services:
     build: .
     env_file:
       - .env
-    ports:
-      - "2222:22"
     volumes:
       - ./domains:/app/domains
       - ./workflows:/app/workflows
       - ./wordlists:/app/wordlists
       - ./output:/app/output
-    command:
-      [
-        "sh",
-        "-c",
-        "echo 'Like a dog without bone, an actor out on loan...' && exec /usr/sbin/sshd -D -e & rayder -w /app/workflows/main.yaml",
-      ]
+    command: ["-w", "/app/workflows/main.yaml"]
+    restart: on-failure

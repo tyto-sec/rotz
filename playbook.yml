@@ -1,0 +1,122 @@
+---
+- name: Setup Bug Bounty Hunter Environment
+  hosts: localhost
+  connection: local
+  vars:
+    go_version: "1.25.1"
+    gopath: "/root/go"
+    goroot: "/usr/local/go"
+    pdcp_api_key: "{{ lookup('env', 'PDCP_API_KEY') }}"
+    github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+    shodan_api_key: "{{ lookup('env', 'SHODAN_API_KEY') }}"
+
+  tasks:
+    - name: Install basic utilities and dependencies via APT
+      apt:
+        name:
+          - openssh-server
+          - ca-certificates
+          - wget
+          - git
+          - unzip
+          - curl
+          - python3
+          - python3-pip
+          - pipx
+          - netcat-traditional
+          - prips
+          - dnsutils
+          - jq
+          - gawk
+          - coreutils
+          - parallel
+          - chromium
+          - libpcap-dev
+        state: present
+        update_cache: yes
+
+    - name: Download and Install Go
+      unarchive:
+        src: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
+        dest: /usr/local
+        remote_src: yes
+        creates: "{{ goroot }}/bin/go"
+
+    - name: Ensure GOPATH directory exists
+      file:
+        path: "{{ gopath }}"
+        state: directory
+        mode: '0755'
+
+    - name: Configure environment variables in /etc/profile.d/bugbounty.sh
+      copy:
+        dest: /etc/profile.d/bugbounty.sh
+        content: |
+          export GOROOT={{ goroot }}
+          export GOPATH={{ gopath }}
+          export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:/root/.local/bin
+          export PDCP_API_KEY="{{ pdcp_api_key }}"
+          export GITHUB_TOKEN="{{ github_token }}"
+          export ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH=go1.25
+          export LC_ALL=C
+          export LANG=C.UTF-8
+        mode: '0644'
+
+    - name: Install Go Tools (ProjectDiscovery and others)
+      shell: "/usr/local/go/bin/go install -v {{ item }}@latest"
+      environment:
+        GOPATH: "{{ gopath }}"
+        GOROOT: "{{ goroot }}"
+        PATH: "{{ ansible_env.PATH }}:{{ goroot }}/bin"
+      loop:
+        - github.com/tomnomnom/anew
+        - github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+        - github.com/projectdiscovery/chaos-client/cmd/chaos
+        - github.com/gwen001/github-subdomains
+        - github.com/projectdiscovery/httpx/cmd/httpx
+        - github.com/sensepost/gowitness
+        - github.com/j3ssie/metabigor
+        - github.com/projectdiscovery/naabu/v2/cmd/naabu
+        - github.com/projectdiscovery/dnsx/cmd/dnsx
+        - github.com/hakluke/hakrevdns
+        - github.com/lc/gau/v2/cmd/gau
+        - github.com/tomnomnom/gf
+        - github.com/tomnomnom/unfurl
+        - github.com/tomnomnom/qsreplace
+        - github.com/lc/subjs
+        - github.com/projectdiscovery/nuclei/v3/cmd/nuclei
+        - github.com/devanshbatham/rayder
+      register: go_install_result
+      changed_when: "'installed' in go_install_result.stdout"
+
+    - name: Symlink Go binaries to /usr/local/bin
+      file:
+        src: "{{ gopath }}/bin/{{ item }}"
+        dest: "/usr/local/bin/{{ item }}"
+        state: link
+      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei]
+
+    - name: Install Aquatone
+      unarchive:
+        src: "https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_linux_amd64_1.7.0.zip"
+        dest: /usr/local/bin/
+        remote_src: yes
+        creates: /usr/local/bin/aquatone
+
+    - name: Install Python Tools via Pip/Pipx
+      shell: "pipx install {{ item }}"
+      loop:
+        - arjun
+        - shodan
+      failed_when: false
+
+    - name: Initialize Shodan
+      shell: "pipx run shodan init {{ shodan_api_key }}"
+      when: shodan_api_key != ""
+
+    - name: Install LinkFinder via pipx
+      shell: "pipx install git+https://github.com/GerbenJavado/LinkFinder.git"
+      failed_when: false
+
+    - name: Create Nuclei Templates update
+      shell: "/usr/local/bin/nuclei -update-templates"
