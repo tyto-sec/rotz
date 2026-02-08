@@ -95,7 +95,7 @@
         src: "{{ gopath }}/bin/{{ item }}"
         dest: "/usr/local/bin/{{ item }}"
         state: link
-      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei]
+      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei, notify, qsreplace, unfurl, gau, gf, subjs, hakrevdns, metabigor]
 
     - name: Install Aquatone
       unarchive:

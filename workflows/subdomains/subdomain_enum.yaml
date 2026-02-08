@@ -1,17 +1,17 @@
 vars:
   OUTPUT_PATH: output/tesla
-  DOMAINS: domains/domains.txt
+  DOMAINS: input/tesla/domains.txt
 
 parallel: true
 modules:
 
-  # - name: subfinder_enum
-  #   cmds:
-  #     - bash workflows/subdomains/src/subfinder_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+  - name: subfinder_enum
+    cmds:
+      - bash workflows/subdomains/src/subfinder_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
   
-  # - name: chaos_enum
-  #   cmds:
-  #     - bash workflows/subdomains/src/chaos_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
+  - name: chaos_enum
+    cmds:
+      - bash workflows/subdomains/src/chaos_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}'
 
   - name: github_enum
     cmds:

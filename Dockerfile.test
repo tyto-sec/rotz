@@ -20,4 +20,6 @@ COPY config/notify/provider-config.yaml /root/.config/notify/provider-config.yam
 
 WORKDIR /app
 
+VOLUME ["/app/output", "/app/input", "/app/workflows", "/app/wordlists"]
+
 CMD ["/bin/bash"]

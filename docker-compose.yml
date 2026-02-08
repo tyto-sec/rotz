@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./domains:/app/domains
+      - ./input:/app/input
       - ./workflows:/app/workflows
       - ./wordlists:/app/wordlists
       - ./output:/app/output

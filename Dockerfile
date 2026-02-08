@@ -20,7 +20,7 @@ COPY config/notify/provider-config.yaml /root/.config/notify/provider-config.yam
 
 WORKDIR /app
 
-VOLUME ["/app/output", "/app/domains", "/app/workflows", "/app/wordlists"]
+VOLUME ["/app/output", "/app/input", "/app/workflows", "/app/wordlists"]
 
 ENTRYPOINT ["rayder"]
 CMD ["-w", "/app/workflows/main.yaml"]
