@@ -35,8 +35,8 @@ certs_discovery() {
 
 	grep -vE '^\s*#|^\s*$' "${domains_file}" | metabigor related -s "cert" | sort -u > "${new_certs_file}"
 
-	if [[ -f "${certs_file}" ]]; then
-		comm -13 <(sort "${certs_file}") <(sort "${new_certs_file}") > "${newly_discovered_file}"
+	if [[ -f "${all_certs_file}" ]]; then
+		comm -13 <(sort "${all_certs_file}") <(sort "${new_certs_file}") > "${newly_discovered_file}"
 	else
 		cp "${new_certs_file}" "${newly_discovered_file}"
 	fi

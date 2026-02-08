@@ -40,8 +40,8 @@ for line in sys.stdin:
         print(ip)' | \
         sort -u > "${new_asn_ips_file}"
 
-    if [[ -f "${asn_ips_file}" ]]; then
-        comm -13 <(sort "${asn_ips_file}") <(sort "${new_asn_ips_file}") > "${newly_discovered_file}"
+    if [[ -f "${all_ips_file}" ]]; then
+        comm -13 <(sort "${all_ips_file}") <(sort "${new_asn_ips_file}") > "${newly_discovered_file}"
     else
         cp "${new_asn_ips_file}" "${newly_discovered_file}"
     fi

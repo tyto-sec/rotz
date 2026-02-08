@@ -35,8 +35,8 @@ google_analytics_discovery() {
 
 	grep -vE '^\s*#|^\s*$' "${domains_file}" | metabigor related -s "google-analytic" | sort -u > "${new_ga_file}"
 
-	if [[ -f "${ga_file}" ]]; then
-		comm -13 <(sort "${ga_file}") <(sort "${new_ga_file}") > "${newly_discovered_file}"
+	if [[ -f "${all_ga_file}" ]]; then
+		comm -13 <(sort "${all_ga_file}") <(sort "${new_ga_file}") > "${newly_discovered_file}"
 	else
 		cp "${new_ga_file}" "${newly_discovered_file}"
 	fi

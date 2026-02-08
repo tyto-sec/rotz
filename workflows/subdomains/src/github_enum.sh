@@ -48,8 +48,8 @@ github_enum() {
 
 	sort -u "${new_subs_file}" -o "${new_subs_file}"
 
-	if [[ -f "${subs_file}" ]]; then
-		comm -13 <(sort "${subs_file}") <(sort "${new_subs_file}") > "${newly_discovered_file}"
+	if [[ -f "${all_subs_file}" ]]; then
+		comm -13 <(sort "${all_subs_file}") <(sort "${new_subs_file}") > "${newly_discovered_file}"
 	else
 		cp "${new_subs_file}" "${newly_discovered_file}"
 	fi
