@@ -23,7 +23,7 @@ uro_cleaning() {
         fi
     fi
 
-    local urls_dir="${output_path}/subs/urls"
+    local urls_dir="${output_path}/content/urls"
     local cleaned_urls_file="${urls_dir}/cleaned.all.urls.txt"
 
     mkdir -p "${urls_dir}"
@@ -42,5 +42,5 @@ uro_cleaning() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-    uro_clean_urls "$@"
+    uro_cleaning "$@"
 fi

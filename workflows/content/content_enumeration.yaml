@@ -55,4 +55,4 @@ modules:
 
   - name: unfurl_enum
     cmds: 
-    - bash workflows/content/src/unfurl_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+    - bash workflows/content/src/unfurl_enum.sh '{{OUTPUT_PATH}}'
