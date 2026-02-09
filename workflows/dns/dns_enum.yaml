@@ -1,42 +1,20 @@
+vars:
+  OUTPUT_PATH: output/vuln
+  SUBDOMAINS: output/vuln/subs/all.subs.txt
+  IPs: output/vuln/ips/all.ips.txt
+  NOTIFY: true
+
 parallel: false
 modules:
 
+  - name: create_output_directory
+    cmds:
+      - mkdir -p {{OUTPUT_PATH}}/dns
+  
   - name: dns_enum
     cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/dns
-        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
-        dnsx -silent -recon -nc -o {{OUTPUT_PATH}}/subs/dns/all.dns.txt
+      - bash workflows/dns/src/dns_enum.sh {{SUBDOMAINS}} {{OUTPUT_PATH}} {{NOTIFY}}
 
-  - name: txt_enum
-    cmds:
-      - |
-        cat {{OUTPUT_PATH}}/subs/dns/all.dns.txt | \
-        grep -E '\sTXT\s' | anew {{OUTPUT_PATH}}/subs/dns/txt_records.dns.txt
-
-  - name: email_spoofing_enum
-    cmds:
-      - |
-        cat {{OUTPUT_PATH}}/subs/dns/txt_records.dns.txt | \
-        grep -Ei '\b(~|\?)all\b' | \
-        grep -i 'v=spf1' | anew {{OUTPUT_PATH}}/subs/dns/vulnerable.email_spoofing.dns.txt
-    
-  - name: cname_enum
-    cmds:
-      - |
-        cat {{OUTPUT_PATH}}/subs/dns/all.dns.txt | \
-        grep -E '\sCNAME\s' | anew {{OUTPUT_PATH}}/subs/dns/cname_records.dns.txt
-  
   - name: revdns_enum
     cmds:
-      - |
-        cat {{OUTPUT_PATH}}/ips/all.ips.txt | \
-        hakrevdns -r 1.1.1.1 | \
-        anew {{OUTPUT_PATH}}/subs/dns/revdns.ip.lookup.txt && \
-        cat {{OUTPUT_PATH}}/subs/dns/revdns.ip.lookup.txt |\
-        awk '{print $2}' | \
-        sed 's/\.$//' | \
-        cut -d. -f1- | \
-        sort -u | \
-        anew {{OUTPUT_PATH}}/subs/subdomains/revdns.domains.txt | \
-        anew {{OUTPUT_PATH}}/subs/all.subs.txt
+      - bash workflows/dns/src/revdns_enum.sh {{IPs}} {{OUTPUT_PATH}} {{NOTIFY}}

@@ -35,7 +35,7 @@ puredns_enum() {
 		fi
 	fi
 
-	local subs_dir="${output_path}/subs/subdomains"
+	local subs_dir="${output_path}/subs"
 	local subs_file="${subs_dir}/puredns.subs.txt"
 	local all_subs_file="${subs_dir}/all.subs.txt"
 	local new_subs_file=""

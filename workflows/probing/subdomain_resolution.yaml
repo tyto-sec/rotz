@@ -1,29 +1,11 @@
+vars:
+  OUTPUT_PATH: output/vuln
+  SUBDOMAINS: output/vuln/subs/all.subs.txt
+  NOTIFY: true
+
 parallel: false
 modules:
   - name: httpx_resolution
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/live
-        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
-        httpx -silent -threads 200 -o {{OUTPUT_PATH}}/subs/live/httpx.live.subs.txt -p 80,443,8080,8443,3000,8000,9000,5000,8888,8181 |  \
-        anew {{OUTPUT_PATH}}/subs/live/all.live.subs.txt \ 
-        rm -f {{OUTPUT_PATH}}/subs/live/httpx.live.subs.txt
+    cmds: 
+      - bash workflows/probing/src/httpx_resolution.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' 
   
-  - name: gowitness_enumeration
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/screenshots
-        gowitness scan file -f {{OUTPUT_PATH}}/subs/live/all.live.subs.txt --write-csv --write-csv-file {{OUTPUT_PATH}}/subs/enum/gowitness.enum.subs.csv --write-jsonl --write-jsonl-file {{OUTPUT_PATH}}/subs/enum/gowitness.enum.subs.jsonl --screenshot-skip-save
-        jq -s '.' {{OUTPUT_PATH}}/subs/enum/gowitness.enum.subs.jsonl > {{OUTPUT_PATH}}/subs/enum/gowitness.enum.subs.json
-
-  - name: gowitness_screenshots
-    cmds:
-      - |
-        gowitness scan file -f {{OUTPUT_PATH}}/subs/live/all.live.subs.txt --screenshot-path {{OUTPUT_PATH}}/subs/screenshots --screenshot-fullpage
-
-  - name: aquatone_screenshots
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/screenshots/aquatone
-        cat {{OUTPUT_PATH}}/subs/live/all.live.subs.txt | \
-        aquatone -out {{OUTPUT_PATH}}/subs/screenshots/aquatone -scan-timeout 5000 -http-timeout 5000 -threads 200

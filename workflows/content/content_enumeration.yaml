@@ -1,62 +1,58 @@
+vars:
+  OUTPUT_PATH: output/vuln
+  SUBDOMAINS: output/vuln/subs/all.live.subs.txt
+  URLS: output/vuln/content/urls/all.urls.txt
+  NOTIFY: true
+  ACTIVE: true
+
 parallel: false
 modules:
 
-  - name: gau_enum
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/urls &&
-        mkdir -p {{OUTPUT_PATH}}/subs/tmp &&
-        cat {{OUTPUT_PATH}}/subs/all.subs.txt | \
-        gau --threads 50 --timeout 15 \
-            --o {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp &&
-        cat {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp | \
-        anew {{OUTPUT_PATH}}/subs/urls/all.urls.txt &&
-        rm -f {{OUTPUT_PATH}}/subs/tmp/all.urls.txt.temp
+  - name: dir_creation
+    cmds: 
+    - | 
+      mkdir -p {{OUTPUT_PATH}}/content/urls 
+      mkdir -p {{OUTPUT_PATH}}/content/tmp
+      mkdir -p {{OUTPUT_PATH}}/content/screenshots
+      mkdir -p {{OUTPUT_PATH}}/content/wordlists
+      touch {{OUTPUT_PATH}}/content/urls/all.urls.txt
 
-  - name: paramspider_enum
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/urls/paramspider &&
-        paramspider -l {{OUTPUT_PATH}}/subs/all.subs.txt  &&
-        cp -r results/* {{OUTPUT_PATH}}/subs/urls/paramspider/ &&
-        rm -rf results &&
-        cat {{OUTPUT_PATH}}/subs/urls/paramspider/* | anew {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt
+  - name: gowitness_screenshots
+    cmds: 
+    - bash workflows/content/src/gowitness_screenshots.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+
+  - name: gowitness_enum
+    cmds: 
+    - bash workflows/content/src/gowitness_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+
+  - name: aquatone_screenshots
+    cmds: 
+    - bash workflows/content/src/aquatone_screenshots.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+
+  - name: gau_enum
+    cmds: 
+    - bash workflows/content/src/gau_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}' 
+
+  - name: katana_enum
+    cmds: 
+    - if {{ACTIVE}}; then bash workflows/content/src/katana_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'; fi
 
   - name: httpx_resolution
-    cmds:
-      - |
-        cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | \
-        httpx -silent -threads 100 -o {{OUTPUT_PATH}}/subs/urls/all.live.urls.txt && 
-        cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt | \
-        httpx -silent -threads 100 -o {{OUTPUT_PATH}}/subs/urls/all.paramspider.live.urls.txt &&
-        cat {{OUTPUT_PATH}}/subs/urls/all.live.urls.txt | grep '?' >> {{OUTPUT_PATH}}/subs/urls/all.parameters.urls.txt &&
-        cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.live.urls.txt | grep '?' >> {{OUTPUT_PATH}}/subs/urls/all.parameters.urls.txt &&
-        cat {{OUTPUT_PATH}}/subs/urls/all.parameters.urls.txt | \
-        sed 's/\?.*//' | \
-        sort -u | \
-        anew {{OUTPUT_PATH}}/subs/urls/clean.parameters.urls.txt
+    cmds: 
+    - bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+  - name: paramspider_enum
+    cmds: 
+    - bash workflows/content/src/paramspider_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
 
   - name: arjun_enum
-    cmds:
-      - |
-        cat {{OUTPUT_PATH}}/subs/urls/all.live.urls.txt | \
-        mkdir -p {{OUTPUT_PATH}}/subs/urls/arjun &&
-        arjun -i {{OUTPUT_PATH}}/subs/urls/clean.parameters.urls.txt -oT {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt 
+    cmds: 
+    - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+
+  - name: uro_cleaning
+    cmds: 
+    - bash workflows/content/src/uro_cleaning.sh '{{URLS}}' '{{OUTPUT_PATH}}'
 
   - name: unfurl_enum
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/subs/parameters &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u keys | anew {{OUTPUT_PATH}}/subs/parameters/all.keys.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt | unfurl -u keys | anew {{OUTPUT_PATH}}/subs/parameters/all.keys.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt | unfurl -u keys | anew {{OUTPUT_PATH}}/subs/parameters/all.keys.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u values | anew {{OUTPUT_PATH}}/subs/parameters/all.values.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u keypairs | anew {{OUTPUT_PATH}}/subs/parameters/all.keypairs.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u domains | anew {{OUTPUT_PATH}}/subs/parameters/all.domains.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/parameters/all.domains.txt ] && cat {{OUTPUT_PATH}}/subs/parameters/all.domains.txt | anew {{OUTPUT_PATH}}/subs/all.subs.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u apexes | anew {{OUTPUT_PATH}}/subs/parameters/all.apex.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.urls.txt | unfurl -u paths | anew {{OUTPUT_PATH}}/subs/parameters/all.paths.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.paramspider.urls.txt | unfurl -u paths | anew {{OUTPUT_PATH}}/subs/parameters/all.paths.txt || true &&
-        [ -f {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt ] && cat {{OUTPUT_PATH}}/subs/urls/all.arjun.urls.txt | unfurl -u paths | anew {{OUTPUT_PATH}}/subs/parameters/all.paths.txt || true
-
-
+    cmds: 
+    - bash workflows/content/src/unfurl_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'

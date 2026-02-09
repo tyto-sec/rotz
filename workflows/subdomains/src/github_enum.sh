@@ -22,7 +22,7 @@ github_enum() {
 		fi
 	fi
 
-	local subs_dir="${output_path}/subs/subdomains"
+	local subs_dir="${output_path}/subs"
 	local tmp_dir="${output_path}/subs/tmp"
 	local subs_file="${subs_dir}/github.subs.txt"
 	local all_subs_file="${subs_dir}/all.subs.txt"

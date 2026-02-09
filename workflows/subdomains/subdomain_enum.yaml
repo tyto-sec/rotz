@@ -1,7 +1,8 @@
 vars:
-  OUTPUT_PATH: output/tesla
-  DOMAINS: input/tesla/domains.txt
+  OUTPUT_PATH: output/vuln
+  DOMAINS: input/vuln/domains.txt
   NOTIFY: true
+  ACTIVE: true
   WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
 
 parallel: false
@@ -10,8 +11,8 @@ modules:
   - name: create_dirs
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/subs/subdomains
-        touch {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt
+        mkdir -p {{OUTPUT_PATH}}/subs
+        touch {{OUTPUT_PATH}}/subs/all.subs.txt
 
   - name: subfinder_enum
     cmds:
@@ -27,8 +28,8 @@ modules:
 
   - name: puredns_enum
     cmds:
-      - bash workflows/subdomains/src/puredns_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' '{{WORDLIST}}'
+      - if {{ACTIVE}}; then bash workflows/subdomains/src/puredns_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' '{{WORDLIST}}'; fi
 
   - name: clean_all_subs
     cmds:
-      - python3 workflows/subdomains/src/clean_domains.py {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt
+      - python3 workflows/subdomains/src/clean_domains.py {{OUTPUT_PATH}}/subs/all.subs.txt

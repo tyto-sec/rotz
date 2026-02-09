@@ -1,9 +1,8 @@
 vars:
-  OUTPUT_PATH: output/tesla
-  IPS: input/tesla/ips.txt
+  OUTPUT_PATH: output/vuln
+  IPS: input/vuln/ips.txt
   NOTIFY: true
-  WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
-  SUBDOMAINS: output/tesla/subs/subdomains/all.subs.txt
+  SUBDOMAINS: output/vuln/subs/all.subs.txt
 
 parallel: false
 modules:

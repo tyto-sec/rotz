@@ -61,6 +61,7 @@
           export ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH=go1.25
           export LC_ALL=C
           export LANG=C.UTF-8
+          eport CGO_ENABLED=1 
         mode: '0644'
 
     - name: Install MassDNS from source
@@ -99,6 +100,7 @@
         - github.com/projectdiscovery/notify/cmd/notify
         - github.com/d3mondev/puredns/v2
         - github.com/j3ssie/sdlookup
+        - github.com/projectdiscovery/katana/cmd/katana
       register: go_install_result
       changed_when: "'installed' in go_install_result.stdout"
 
@@ -107,7 +109,7 @@
         src: "{{ gopath }}/bin/{{ item }}"
         dest: "/usr/local/bin/{{ item }}"
         state: link
-      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei, notify, qsreplace, unfurl, gau, gf, subjs, hakrevdns, metabigor]
+      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei, notify, qsreplace, unfurl, gau, gf, subjs, hakrevdns, metabigor, rayder, puredns, sdlookup, katana]
 
     - name: Install Aquatone
       unarchive:
@@ -121,6 +123,7 @@
       loop:
         - arjun
         - shodan
+        - uro
       failed_when: false
 
     - name: Initialize Shodan
@@ -130,6 +133,14 @@
     - name: Install LinkFinder via pipx
       shell: "pipx install git+https://github.com/GerbenJavado/LinkFinder.git"
       failed_when: false
+
+    - name: Install ParamSpider from source
+      shell: |
+        git clone https://github.com/devanshbatham/paramspider /opt/paramspider
+        cd /opt/paramspider
+        pip install .
+      args:
+        creates: /opt/paramspider/paramspider
 
     - name: Create Nuclei Templates update
       shell: "/usr/local/bin/nuclei -update-templates"
