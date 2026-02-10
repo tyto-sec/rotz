@@ -39,6 +39,9 @@ paramspider_enum() {
     if [[ -d "${paramspider_dir}" ]]; then
         cat "${paramspider_dir}"/* 2>/dev/null | anew "${all_paramspider_file}" || true
     fi
+
+    cat "${all_paramspider_file}" | anew "${urls_dir}/all.urls.txt" || true
+
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then

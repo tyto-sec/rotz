@@ -5,7 +5,7 @@ vars:
   NOTIFY: true
   ACTIVE: true
 
-parallel: false
+parallel: true
 modules:
 
   - name: dir_creation
@@ -37,10 +37,6 @@ modules:
     cmds: 
     - if {{ACTIVE}}; then bash workflows/content/src/katana_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'; fi
 
-  - name: httpx_resolution
-    cmds: 
-    - bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'
-
   - name: paramspider_enum
     cmds: 
     - bash workflows/content/src/paramspider_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
@@ -48,6 +44,10 @@ modules:
   - name: arjun_enum
     cmds: 
     - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+
+  - name: httpx_resolution
+    cmds: 
+    - bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'
 
   - name: uro_cleaning
     cmds: 

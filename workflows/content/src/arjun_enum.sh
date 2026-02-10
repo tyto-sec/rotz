@@ -30,6 +30,8 @@ arjun_enum() {
     mkdir -p "${arjun_dir}"
 
     arjun -i "${input_file}" -oT "${arjun_output_file}"
+
+    cat "${arjun_output_file}" | anew "${urls_dir}/all.urls.txt" || true
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then

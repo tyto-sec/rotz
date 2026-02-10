@@ -130,9 +130,25 @@
       shell: "pipx run shodan init {{ shodan_api_key }}"
       when: shodan_api_key != ""
 
-    - name: Install LinkFinder via pipx
-      shell: "pipx install git+https://github.com/GerbenJavado/LinkFinder.git"
+    - name: Install LinkFinder via pip
+      shell: "pip3 install git+https://github.com/GerbenJavado/LinkFinder.git"
       failed_when: false
+
+    - name: Ensure linkfinder CLI wrapper exists
+      copy:
+        dest: /usr/local/bin/linkfinder
+        mode: '0755'
+        content: |
+          #!/usr/bin/env bash
+          exec python3 -m linkfinder "$@"
+
+    - name: Install JSScanner from source
+      shell: |
+        git clone https://github.com/0x240x23elu/JSScanner.git /opt/JSScanner
+        cd /opt/JSScanner
+        pip3 install -r requirements.txt
+      args:
+        creates: /opt/JSScanner/JSScanner.py
 
     - name: Install ParamSpider from source
       shell: |

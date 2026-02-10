@@ -1,0 +1,57 @@
+vars:
+  OUTPUT_PATH: output/vuln
+  URLS: output/vuln/content/urls/all.urls.txt
+  JAVASCRIPT: output/vuln/content/javascript/all.javascript.txt
+  NOTIFY: true
+  ACTIVE: false
+
+parallel: false
+modules:
+
+    - name: dir_creation
+      cmds: 
+      - mkdir -p {{OUTPUT_PATH}}/content/javascript 
+
+    - name: subjs_enum
+      cmds: 
+      - bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: linkfinder_enum
+      cmds: 
+      - bash workflows/javascript/src/linkfinder_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: subjs_enum
+      cmds: 
+      - bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: linkfinder_enum
+      cmds: 
+      - bash workflows/javascript/src/linkfinder_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: subjs_enum
+      cmds: 
+      - bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: jsscanner_enum
+      cmds: 
+      - bash workflows/javascript/src/jsscanner_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'
+
+    - name: arjun_enum
+      cmds: 
+      - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+
+    - name: httpx_resolution
+      cmds: 
+      - bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: uro_cleaning
+      cmds: 
+      - bash workflows/content/src/uro_cleaning.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+
+    - name: unfurl_enum
+      cmds: 
+      - bash workflows/content/src/unfurl_enum.sh '{{OUTPUT_PATH}}'
+
+    - name: nuclei_enum
+      cmds: 
+      - bash workflows/javascript/src/nuclei_js_scan.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
