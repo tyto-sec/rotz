@@ -34,7 +34,7 @@ katana_enum() {
     trap '[[ -n "${tmp_urls_file:-}" ]] && rm -f "${tmp_urls_file}"' EXIT
 
     cat "${subs_file}" | \
-        katana > "${tmp_urls_file}"
+        katana -c 2 -p 2 -rd 1 -rl 30> "${tmp_urls_file}"
 
     if [[ -s "${tmp_urls_file}" ]]; then
         cat "${tmp_urls_file}" | anew "${all_urls_file}"

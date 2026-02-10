@@ -29,7 +29,7 @@ arjun_enum() {
 
     mkdir -p "${arjun_dir}"
 
-    arjun -i "${input_file}" -oT "${arjun_output_file}"
+    arjun -i "${input_file}" -oT "${arjun_output_file}" -t 2 -d 1 --rate-limit 20 --stable
 
     cat "${arjun_output_file}" | anew "${urls_dir}/all.urls.txt" || true
 }

@@ -79,9 +79,12 @@ def host_from_url(url: str) -> str:
         url = "http:" + url
     if "://" not in url:
         url = "http://" + url
-    parsed = urlparse(url)
-    host = (parsed.hostname or "").rstrip('.').lower()
-    return host
+    try:
+        parsed = urlparse(url)
+        host = (parsed.hostname or "").rstrip('.').lower()
+        return host
+    except Exception:
+        return ""
 
 with open(in_path, 'r', encoding='utf-8', errors='ignore') as fin, open(out_path, 'w', encoding='utf-8') as fout:
     for line in fin:
