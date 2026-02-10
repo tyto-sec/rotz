@@ -4,6 +4,7 @@ vars:
   JAVASCRIPT: output/vuln/content/javascript/all.javascript.txt
   NOTIFY: true
   ACTIVE: true
+  RECURSION: true
 
 parallel: false
 modules:
@@ -30,19 +31,19 @@ modules:
 
     - name: katana_enum
       cmds: 
-      - if {{ACTIVE}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
+      - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
 
     - name: linkfinder_enum
       cmds: 
-      - bash workflows/javascript/src/linkfinder_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - if {{RECURSION}}; then bash workflows/javascript/src/linkfinder_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
 
     - name: subjs_enum
       cmds: 
-      - bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - if {{RECURSION}}; then bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
 
     - name: katana_enum
       cmds: 
-      - if {{ACTIVE}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
+      - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
 
     - name: jsscanner_enum
       cmds: 
@@ -50,11 +51,11 @@ modules:
 
     - name: arjun_enum
       cmds: 
-      - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+      - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
 
     - name: httpx_resolution
       cmds: 
-      - bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - if {{RECURSION}}; then bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
 
     - name: uro_cleaning
       cmds: 
