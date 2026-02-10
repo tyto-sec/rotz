@@ -24,7 +24,7 @@ cewl_wordlist_generation() {
     fi
 
     local fuzz_dir="${output_path}/content/wordlists"
-    local words_file="${fuzz_dir}/cewl.words.list"
+    local words_file="${fuzz_dir}/cewl.word.list"
     local tmp_words_file=""
 
     mkdir -p "${fuzz_dir}"

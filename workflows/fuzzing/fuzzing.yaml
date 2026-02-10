@@ -1,29 +1,38 @@
 vars:
   OUTPUT_PATH: output/vuln
   SUBS: output/vuln/subs/all.live.subs.txt
-  RECURSION: false
+  FUZZING_URLS: output/vuln/content/urls/fuzzing/ffuf.urls.txt
   PATH_WORDLIST: output/vuln/content/wordlists/all.paths.txt
+  WORDS_WORDLIST: output/vuln/content/wordlists/fuzzing.word.list
   SUBDOMAINS_WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
+  ACTIVE: true
+  NOTIFY: true
 
 parallel: false
 modules: 
 
-  - name: create_dirs
-    cmds:
-      - |
-        mkdir -p {{OUTPUT_PATH}}/content/urls
-        touch {{OUTPUT_PATH}}/content/urls/all.fuzzing.urls.txt
+  # - name: create_dirs
+  #   cmds:
+  #     - |
+  #       mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing
+  #       touch {{OUTPUT_PATH}}/content/urls/fuzzing/ffuf.urls.txt
 
-  - name: cewl_wordlist_generation
-    cmds:
-      - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{SUBS}} {{OUTPUT_PATH}}
+  # - name: cewl_wordlist_generation
+  #   cmds:
+  #     - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{SUBS}} {{OUTPUT_PATH}}
 
-  - name: extract_words_from_paths
-    cmds:
-      - bash workflows/fuzzing/src/extract_words_from_paths.sh {{PATH_WORDLIST}} {{OUTPUT_PATH}}
+  # - name: extract_words_from_paths
+  #   cmds:
+  #     - bash workflows/fuzzing/src/extract_words_from_paths.sh {{PATH_WORDLIST}} {{OUTPUT_PATH}}
 
-  - name: concatanate_wordlists
-    cmds:
-      - cat {{OUTPUT_PATH}}/content/wordlists/cewl.words.list {{OUTPUT_PATH}}/content/wordlists/paths.words.list | anew {{OUTPUT_PATH}}/content/wordlists/fuzzing.words.list
+  # - name: concatanate_wordlists
+  #   cmds:
+  #     - cat {{OUTPUT_PATH}}/content/wordlists/cewl.word.list {{OUTPUT_PATH}}/content/wordlists/paths.word.list | anew {{OUTPUT_PATH}}/content/wordlists/fuzzing.word.list
 
+  - name: gobuster_fuzzing
+    cmds:
+      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_fuzzing.sh {{SUBS}} {{OUTPUT_PATH}} {{WORDS_WORDLIST}} {{NOTIFY}}; fi
   
+  - name: vhost_fuzzing
+    cmds:
+      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_vhost_fuzzing.sh {{SUBS}} {{OUTPUT_PATH}} {{SUBDOMAINS_WORDLIST}} {{NOTIFY}}; fi

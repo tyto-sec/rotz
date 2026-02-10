@@ -6,7 +6,7 @@ vars:
   ACTIVE: false
   RECURSION: false
   NUCLEI: false
-  DOWNLOAD: true
+  DOWNLOAD: false
 
 parallel: false
 modules:
@@ -25,7 +25,7 @@ modules:
 
     - name: linkfinder_enum
       cmds: 
-      - bash workflows/javascript/src/linkfinder_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/javascript/src/linkfinder_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'
 
     - name: subjs_enum
       cmds: 
@@ -37,7 +37,7 @@ modules:
 
     - name: linkfinder_enum
       cmds: 
-      - if {{RECURSION}}; then bash workflows/javascript/src/linkfinder_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+      - if {{RECURSION}}; then bash workflows/javascript/src/linkfinder_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
 
     - name: subjs_enum
       cmds: 

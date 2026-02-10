@@ -105,6 +105,9 @@
         - github.com/d3mondev/puredns/v2
         - github.com/j3ssie/sdlookup
         - github.com/projectdiscovery/katana/cmd/katana
+        - github.com/ffuf/ffuf/v2
+        - github.com/deletescape/goop
+        - github.com/OJ/gobuster/v3
       register: go_install_result
       changed_when: "'installed' in go_install_result.stdout"
 
@@ -113,7 +116,7 @@
         src: "{{ gopath }}/bin/{{ item }}"
         dest: "/usr/local/bin/{{ item }}"
         state: link
-      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei, notify, qsreplace, unfurl, gau, gf, subjs, hakrevdns, metabigor, rayder, puredns, sdlookup, katana]
+      loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei, notify, qsreplace, unfurl, gau, gf, subjs, hakrevdns, metabigor, rayder, puredns, sdlookup, katana, ffuf, goop, gobuster]
 
     - name: Install Aquatone
       unarchive:

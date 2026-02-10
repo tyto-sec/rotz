@@ -24,7 +24,7 @@ extract_words_from_paths() {
     fi
 
     local fuzz_dir="${output_path}/content/wordlists"
-    local words_file="${fuzz_dir}/paths.words.list"
+    local words_file="${fuzz_dir}/paths.word.list"
     local tmp_words_file=""
 
     mkdir -p "${fuzz_dir}"

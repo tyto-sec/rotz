@@ -24,7 +24,7 @@ linkfinder_enum() {
     fi
 
     local js_dir="${output_path}/content/javascript"
-    local urls_dir="${output_path}/content/url"
+    local urls_dir="${output_path}/content/urls"
     local wordlists_dir="${output_path}/content/wordlists"
     local linkfinder_file="${js_dir}/linkfinder.content.txt"
     local linkfinder_urls_file="${urls_dir}/linkfinder.url.txt"
