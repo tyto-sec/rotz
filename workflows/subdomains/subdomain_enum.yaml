@@ -2,8 +2,9 @@ vars:
   OUTPUT_PATH: output/vuln
   DOMAINS: input/vuln/domains.txt
   NOTIFY: true
-  ACTIVE: true
+  ACTIVE: false
   WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
+  RECURSION: false
 
 parallel: false
 modules:
@@ -33,3 +34,11 @@ modules:
   - name: clean_all_subs
     cmds:
       - python3 workflows/subdomains/src/clean_domains.py {{OUTPUT_PATH}}/subs/all.subs.txt
+
+  - name: subfinder_recursive_enum
+    cmds:
+      - if {{RECURSION}}; then bash workflows/subdomains/src/subfinder_enum.sh '{{OUTPUT_PATH}}/subs/all.subs.txt' '{{OUTPUT_PATH}}'; fi
+  
+  - name: chaos_recursive_enum
+    cmds:
+      - if {{RECURSION}}; then bash workflows/subdomains/src/chaos_enum.sh '{{OUTPUT_PATH}}/subs/all.subs.txt' '{{OUTPUT_PATH}}'; fi

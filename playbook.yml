@@ -33,6 +33,8 @@
           - chromium
           - libpcap-dev
           - nano
+          - nodejs
+          - npm
         state: present
         update_cache: yes
 
@@ -160,3 +162,6 @@
 
     - name: Create Nuclei Templates update
       shell: "/usr/local/bin/nuclei -update-templates"
+
+    - name: Install js-beautify globally via npm
+      shell: "npm -g install js-beautify"

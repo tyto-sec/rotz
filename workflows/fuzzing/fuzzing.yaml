@@ -1,0 +1,14 @@
+vars:
+  OUTPUT_PATH: output/vuln
+  DOMAINS: input/vuln/domains.txt
+  WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
+  RECURSION: false
+
+parallel: false
+modules: 
+
+  - name: create_dirs
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/content/urls
+        touch {{OUTPUT_PATH}}/content/urls/all.fuzzing.urls.txt

@@ -3,8 +3,10 @@ vars:
   URLS: output/vuln/content/urls/all.urls.txt
   JAVASCRIPT: output/vuln/content/javascript/all.javascript.txt
   NOTIFY: true
-  ACTIVE: true
-  RECURSION: true
+  ACTIVE: false
+  RECURSION: false
+  NUCLEI: false
+  DOWNLOAD: true
 
 parallel: false
 modules:
@@ -49,6 +51,10 @@ modules:
       cmds: 
       - bash workflows/javascript/src/jsscanner_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'
 
+    - name: download_javascript
+      cmds:
+      - if {{DOWNLOAD}}; then bash workflows/javascript/src/download_js_files.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
+
     - name: arjun_enum
       cmds: 
       - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
@@ -67,4 +73,4 @@ modules:
 
     - name: nuclei_enum
       cmds: 
-      - if {{ACTIVE}}; then bash workflows/javascript/src/nuclei_js_scan.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'; fi
+      - if {{NUCLEI}}; then bash workflows/javascript/src/nuclei_js_scan.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'; fi

@@ -3,7 +3,7 @@ vars:
   SUBDOMAINS: output/vuln/subs/all.live.subs.txt
   URLS: output/vuln/content/urls/all.urls.txt
   NOTIFY: true
-  ACTIVE: true
+  ACTIVE: false
 
 parallel: true
 modules:
