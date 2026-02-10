@@ -35,6 +35,8 @@
           - nano
           - nodejs
           - npm
+          - cewl
+          - inetutils-ping
         state: present
         update_cache: yes
 

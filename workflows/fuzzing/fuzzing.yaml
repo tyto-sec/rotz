@@ -1,8 +1,9 @@
 vars:
   OUTPUT_PATH: output/vuln
-  DOMAINS: input/vuln/domains.txt
-  WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
+  SUBS: output/vuln/subs/all.live.subs.txt
   RECURSION: false
+  PATH_WORDLIST: output/vuln/content/wordlists/all.paths.txt
+  SUBDOMAINS_WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
 
 parallel: false
 modules: 
@@ -12,3 +13,17 @@ modules:
       - |
         mkdir -p {{OUTPUT_PATH}}/content/urls
         touch {{OUTPUT_PATH}}/content/urls/all.fuzzing.urls.txt
+
+  - name: cewl_wordlist_generation
+    cmds:
+      - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{SUBS}} {{OUTPUT_PATH}}
+
+  - name: extract_words_from_paths
+    cmds:
+      - bash workflows/fuzzing/src/extract_words_from_paths.sh {{PATH_WORDLIST}} {{OUTPUT_PATH}}
+
+  - name: concatanate_wordlists
+    cmds:
+      - cat {{OUTPUT_PATH}}/content/wordlists/cewl.words.list {{OUTPUT_PATH}}/content/wordlists/paths.words.list | anew {{OUTPUT_PATH}}/content/wordlists/fuzzing.words.list
+
+  
