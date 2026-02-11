@@ -1,0 +1,33 @@
+{
+    "flags": "-iE", 
+    "patterns": [
+        "/* --- Pesquisa e Filtragem (Reflexão Direta) --- */",
+        "q=", "s=", "search=", "query=", "keyword=", "keywords=", "term=", "terms=", "text=",
+        "filter=", "find=", "browse=", "tag=", "label=", "category=", "cat=", "topic=",
+        
+        "/* --- Identidade e Atributos de Usuário --- */",
+        "name=", "first_name=", "last_name=", "nickname=", "username=", "user=", "profile=",
+        "email=", "emailto=", "contact=", "address=", "phone=", "bio=", "signature=", "title=",
+        
+        "/* --- Navegação e Localização --- */",
+        "lang=", "language=", "l=", "locale=", "country=", "region=", "city=", "zone=",
+        "page=", "p=", "pg=", "page_id=", "id=", "item=", "item_id=", "view=", "display=",
+        "mode=", "layout=", "theme=", "style=",
+        
+        "/* --- Integração e Callbacks (DOM/JavaScript) --- */",
+        "callback=", "cb=", "jsonp=", "api=", "api_key=", "key=", "token=", "session=",
+        "csrf_token=", "unsubscribe_token=", "nonce=", "origin=", "source=", "src=",
+        
+        "/* --- Datas e Números --- */",
+        "year=", "month=", "day=", "date=", "begindate=", "enddate=", "start=", "end=",
+        "timestamp=", "version=", "ver=", "build=",
+        
+        "/* --- Redirecionamento e URLs (Injeção de Atributo) --- */",
+        "url=", "uri=", "link=", "goto=", "redirect=", "return=", "return_to=", "next=",
+        "image_url=", "immagine=", "pic=", "thumb=", "attachment=", "file=",
+        
+        "/* --- Campos de Formulário e Input --- */",
+        "val=", "value=", "data=", "input=", "form=", "content=", "msg=", "message=",
+        "subject=", "comment=", "post=", "string=", "type=", "list_type=", "categoryid="
+    ]
+}

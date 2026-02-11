@@ -1,0 +1,29 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Referência Direta a Arquivos --- */",
+        "file=", "document=", "doc=", "pdf=", "xml=", "json=", "txt=", "img=", "image=",
+        "attachment=", "filename=", "file_path=", "file_name=", "asset=", "resource=",
+        
+        "/* --- Navegação de Estrutura e Diretório --- */",
+        "folder=", "root=", "path=", "dir=", "directory=", "folder_path=", "base_dir=",
+        "home=", "prefix=", "suffix=", "ext=", "extension=", "locate=", "location=",
+        
+        "/* --- Renderização de Páginas e Templates --- */",
+        "pg=", "page=", "name=", "cat=", "category=", "type=", "module=", "mod=",
+        "action=", "board=", "date=", "detail=", "content=", "layout=", "template=",
+        "view=", "show=", "display=", "theme=", "style=", "ui=", "component=",
+        
+        "/* --- Funções de Inclusão e Configuração --- */",
+        "include=", "inc=", "require=", "require_file=", "php_path=", "src=", "source=",
+        "site=", "url=", "uri=", "lang=", "language=", "locale=", "translation=",
+        "conf=", "config=", "settings=", "cfg=", "setup=", "manifest=",
+        
+        "/* --- Upload e Download --- */",
+        "download=", "load=", "open=", "read=", "write=", "store=", "save=",
+        "fetch=", "get_file=", "put_file=", "preview=", "thumb=", "thumbnail=",
+        
+        "/* --- Outros Alvos de Injeção de Path --- */",
+        "script=", "callback=", "plugin=", "app=", "run=", "exec=", "env=", "logfile=", "log="
+    ]
+}

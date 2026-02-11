@@ -1,0 +1,25 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Core Debug & Trace --- */",
+        "debug=", "dbg=", "trace=", "verbose=", "v=", "log=", "logging=", "log_level=",
+        "diag=", "diagnose=", "diagnostic=", "monitor=", "inspect=", "dump=", "stacktrace=",
+        
+        "/* --- Bypass de Fluxo e Lógica --- */",
+        "bypass=", "skip=", "ignore=", "disable=", "enable=", "toggle=", "force=",
+        "override=", "overwrite=", "validate=", "verify=", "check_auth=", "no_auth=",
+        "free=", "trial=", "demo=", "unlocked=", "status=", "state=",
+        
+        "/* --- Ambientes e Contexto --- */",
+        "env=", "environment=", "dev=", "devel=", "developer=", "sandbox=", "test=",
+        "staging=", "prod=", "local=", "internal=", "hidden=", "preview=", "beta=",
+        
+        "/* --- Controle de Versão e Feature Flags --- */",
+        "version=", "v=", "ver=", "build=", "rev=", "revision=", "feature=", "ff=",
+        "experiment=", "exp=", "variant=", "ab_test=", "opt_in=", "opt_out=",
+        
+        "/* --- Manipulação de Identidade em Debug --- */",
+        "as_user=", "impersonate=", "su=", "sudo=", "user_id=", "uid=", "login_as=",
+        "role=", "priv=", "perm=", "is_admin=", "is_root=", "is_staff=", "superuser="
+]
+}

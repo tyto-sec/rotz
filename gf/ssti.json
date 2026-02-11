@@ -1,0 +1,26 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Motores de Template e Renderização --- */",
+        "template=", "temp=", "tpl=", "render=", "view=", "show=", "display=", "preview=",
+        "layout=", "theme=", "style=", "css=", "component=", "fragment=", "section=",
+        
+        "/* --- Personalização e Atributos de Usuário --- */",
+        "name=", "nickname=", "first_name=", "last_name=", "user=", "username=", "profile=",
+        "bio=", "signature=", "title=", "heading=", "description=", "desc=", "label=",
+        
+        "/* --- Conteúdo Dinâmico e Mensagens --- */",
+        "content=", "body=", "text=", "msg=", "message=", "subject=", "mail=", "email=",
+        "comment=", "post=", "activity=", "status=", "input=", "data=", "value=",
+        
+        "/* --- Geração de Documentos e Relatórios --- */",
+        "pdf=", "doc=", "report=", "summary=", "invoice=", "ticket=", "statement=",
+        "export=", "print=", "format=", "syntax=", "lang=",
+        
+        "/* --- Lógica de Fluxo e Redirecionamento --- */",
+        "id=", "callback=", "redirect=", "return=", "next=", "to=", "path=", "url=",
+        
+        "/* --- Parâmetros Específicos de Frameworks --- */",
+        "engine=", "provider=", "extension=", "file=", "src=", "source=", "include="
+    ]
+}

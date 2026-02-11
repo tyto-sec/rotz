@@ -1,0 +1,39 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Identificadores de Conta e Usuário --- */",
+        "id=", "user=", "user_id=", "uid=", "account=", "account_id=", "member=", "member_id=",
+        "profile=", "profile_id=", "username=", "nickname=", "customer=", "customer_id=",
+        "client_id=", "owner=", "creator=", "employee=", "staff_id=",
+        
+        "/* --- Documentos, Finanças e Transações --- */",
+        "doc=", "doc_id=", "document=", "invoice=", "invoice_id=", "order=", "order_id=",
+        "bill=", "payment=", "transaction=", "trans_id=", "receipt=", "ticket=", "ticket_id=",
+        "contract=", "agreement=", "number=", "no=", "ref=", "reference=", "serial=",
+        
+        "/* --- Arquivos e Mídia --- */",
+        "file=", "file_id=", "image_id=", "img=", "photo_id=", "video_id=", "attachment=",
+        "download=", "upload_id=", "media=", "asset=", "blob=", "key=", "secret_key=",
+        
+        "/* --- Comunicação e Social --- */",
+        "msg=", "message_id=", "mail_id=", "chat_id=", "room_id=", "thread=", "post_id=",
+        "comment_id=", "group=", "group_id=", "org=", "org_id=", "team=", "team_id=",
+        
+        "/* --- Ações e Relatórios --- */",
+        "report=", "report_id=", "edit=", "modify=", "update=", "delete_id=", "view=",
+        "download_report=", "export=", "print=", "statement=", "summary=",
+        
+        "/* --- Infraestrutura e Banco de Dados --- */",
+        "row=", "table=", "db_id=", "entry=", "record=", "item=", "item_id=", "object=",
+        "obj_id=", "uuid=", "guid=", "slug=", "hash=", "token=",
+        
+        "/* --- Localização e Entrega --- */",
+        "address_id=", "loc_id=", "location=", "store_id=", "ship_id=", "cart_id=",
+        "booking=", "reservation=", "service_id="
+    ]
+}
+
+
+
+
+

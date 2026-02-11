@@ -1,0 +1,35 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Infraestrutura e DevOps --- */",
+        "jenkins", "git", "gitlab", "github", "bitbucket", "svn", "confluence", "jira",
+        "docker", "kubernetes", "k8s", "grafana", "prometheus", "kibana", "elastic",
+        "ansible", "terraform", "vault", "consul", "rancher", "puppet", "chef",
+        "devops", "deploy", "build", "pipeline", "ci", "cd", "nexus", "artifactory",
+
+        "/* --- Ambientes de Desenvolvimento e Teste --- */",
+        "dev", "development", "dev-api", "stage", "staging", "stg", "test", "testing",
+        "qa", "uat", "lab", "sandbox", "demo", "preprod", "beta", "alpha", "temp",
+        "old", "new", "v2", "v3", "canary", "local", "integ",
+
+        "/* --- Administração e Gestão --- */",
+        "admin", "administrator", "adm", "manage", "manager", "mgt", "dashboard",
+        "panel", "control", "cp", "cpanel", "directadmin", "plesk", "cockpit",
+        "staff", "backend", "backoffice", "portal", "office", "internal", "intranet",
+
+        "/* --- Banco de Dados e Storage --- */",
+        "db", "database", "sql", "mysql", "postgres", "psql", "mongodb", "redis",
+        "memcached", "influx", "cassandra", "storage", "s3", "bucket", "minio",
+        "ftp", "sftp", "nas", "backup", "dbadmin", "phpmyadmin", "pgadmin",
+
+        "/* --- Segurança e Rede --- */",
+        "proxy", "reverse", "gateway", "vpn", "firewall", "waf", "ids", "ips",
+        "tunnel", "bastion", "jump", "ssh", "auth", "login", "sso", "identity",
+        "oauth", "saml", "keycloak", "okta", "cert", "monitor", "status", "health",
+
+        "/* --- APIs e Serviços Específicos --- */",
+        "api", "api-docs", "swagger", "graph", "graphql", "rest", "soap", "rpc",
+        "ws", "web-services", "mail", "smtp", "imap", "pop3", "exchange",
+        "webmail", "m", "mobile", "app", "mobile-api", "static", "assets", "cdn"
+    ]
+}

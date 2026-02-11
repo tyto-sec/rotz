@@ -1,0 +1,36 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Execução Direta de Comandos --- */",
+        "cmd=", "command=", "command_line=", "exec=", "execute=", "run=", "do=", "action=",
+        "eval=", "system=", "os=", "shell=", "sh=", "bash=", "query=", "cli=",
+        
+        "/* --- Diagnóstico de Rede e Sistema --- */",
+        "ping=", "ping_host=", "nslookup=", "traceroute=", "dig=", "host=", "ip=", "addr=",
+        "address=", "interface=", "net=", "network=", "port=", "connect=", "socket=",
+        
+        "/* --- Manipulação de Scripts e Código --- */",
+        "code=", "payload=", "script=", "source=", "src=", "func=", "function=", "arg=",
+        "args=", "argument=", "option=", "params=", "syntax=", "expression=", "expr=",
+        
+        "/* --- Processos e Serviços --- */",
+        "process=", "proc=", "task=", "job=", "daemon=", "service=", "status=", "start=",
+        "stop=", "restart=", "reboot=", "kill=", "terminate=", "spawn=", "step=",
+        
+        "/* --- Arquivos, Binários e Módulos --- */",
+        "exe=", "binary=", "bin=", "module=", "mod=", "plugin=", "ext=", "extension=",
+        "load=", "include=", "require=", "import=", "library=", "lib=",
+        
+        "/* --- Manipulação de Dados e Output --- */",
+        "print=", "echo=", "output=", "out=", "input=", "data=", "raw=", "format=",
+        "convert=", "parse=", "pipe=", "stream=",
+        
+        "/* --- Logs e Debug --- */",
+        "log=", "logfile=", "read=", "view=", "show=", "tail=", "grep=", "history=",
+        "debug=", "dbg=", "feature=", "flag=",
+        
+        "/* --- Upload e Gerenciamento de Arquivos --- */",
+        "upload=", "download=", "file=", "dir=", "directory=", "path=", "folder=",
+        "store=", "save=", "write=", "put=", "fetch="
+    ]
+}

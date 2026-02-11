@@ -1,0 +1,27 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Core Request & Fetch --- */",
+        "url=", "uri=", "link=", "src=", "source=", "u=", "r=", "api=", "request=", "req=",
+        "fetch=", "get=", "proxy=", "redirect=", "follow=", "webhook=", "hook=", "cb=",
+        
+        "/* --- Destinos e Endereços --- */",
+        "host=", "hostname=", "domain=", "domain_name=", "site=", "target=", "dest=", 
+        "destination=", "to=", "out=", "remote=", "server=", "ip=", "address=", "addr=", 
+        "endpoint=", "service=", "port=", "path=",
+        
+        "/* --- Mídia e Documentos Remotos --- */",
+        "img=", "image=", "image_url=", "img_url=", "picture=", "avatar=", "icon=",
+        "pdf=", "doc=", "document=", "file=", "file_url=", "xml_url=", "data=", "data_url=",
+        "html=", "html_url=", "attachment=", "download=", "preview=", "view=", "thumb=",
+        
+        "/* --- Integração e Callbacks --- */",
+        "callback=", "call=", "ping=", "ping_url=", "sync=", "sync_url=", "notify=", 
+        "notification=", "origin=", "ref=", "reference=", "return=", "return_url=", 
+        "success_url=", "fail_url=", "error_url=",
+        
+        "/* --- Dashboards e Debug de Rede --- */",
+        "dbg=", "debug=", "monitor=", "status=", "health=", "ping=", "connect=",
+        "socket=", "tunnel=", "open=", "stream=", "metadata=", "info=", "conf=", "cfg="
+    ]
+}

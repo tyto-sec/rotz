@@ -1,0 +1,31 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Identificadores e Referências --- */",
+        "id=", "uid=", "uuid=", "user=", "username=", "account=", "account_id=", "member=", "customer=",
+        "email=", "phone=", "serial=", "code=", "ref=", "key=", "token=",
+        
+        "/* --- Consultas e Operações de DB --- */",
+        "query=", "q=", "s=", "search=", "keyword=", "search_term=", "find=", "filter=", "params=",
+        "where=", "select=", "sel=", "from=", "table=", "column=", "field=", "row=", "string=", "number=", 
+        "val=", "value=", "entry=", "record=", "item=",
+        
+        "/* --- Ordenação e Paginação --- */",
+        "order=", "order_by=", "sort=", "sort_by=", "direction=", "dir=", "limit=", "offset=", 
+        "page=", "pg=", "results=", "results_per_page=", "group_by=", "group=",
+        
+        "/* --- Ações e Processamento --- */",
+        "update=", "delete=", "del=", "modify=", "edit=", "action=", "process=", "do=", 
+        "task=", "exec=", "execute=", "call=", "procedure=", "proc=", "func=", "function=",
+        
+        "/* --- Relatórios e Visualização --- */",
+        "report=", "report_id=", "view=", "show=", "display=", "summary=", "list=", "stat=",
+        "status=", "type=", "category=", "cat=", "role=", "grade=", "level=",
+        
+        "/* --- Parâmetros de Tempo e Debug (Blind) --- */",
+        "sleep=", "wait=", "delay=", "time=", "timeout=", "benchmark=", "test=", "dbg=", "debug=",
+        
+        "/* --- Metadados e Arquivos --- */",
+        "file=", "doc=", "path=", "src=", "source=", "fetch=", "load=", "import=", "export=", "cfg="
+    ]
+}

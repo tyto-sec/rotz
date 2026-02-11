@@ -1,0 +1,28 @@
+{
+    "flags": "-iE",
+    "patterns": [
+        "/* --- Redirecionamento de Fluxo --- */",
+        "redir=", "redirect=", "redirect_to=", "redirect_uri=", "redirect_url=", "redirect_host=",
+        "destination=", "dest=", "target=", "to=", "goto=", "go=", "out=", "forward=",
+        "forward_url=", "forward_to=", "navigation=", "nav=", "jump=", "jump_to=", "rt=", "rurl=",
+        
+        "/* --- Fluxo de Autenticação e Login --- */",
+        "return=", "returnTo=", "return_to=", "return_url=", "return_path=", "back=", "back_url=",
+        "back_to=", "login?to=", "login_url=", "logout=", "logout_url=", "logout_to=", "callback=",
+        "cb=", "authorize_callback=", "oauth_callback=", "signin=", "signout=", "continue=",
+        
+        "/* --- Arquivos e Mídia --- */",
+        "url=", "uri=", "link=", "link_url=", "path=", "page=", "page_url=", "page_to=",
+        "file=", "file_url=", "file_name=", "image_url=", "img_url=", "image_src=", "src=",
+        "data=", "data_url=", "load=", "load_url=", "load_file=", "download_url=", "fetch_url=",
+        
+        "/* --- Integração de Terceiros e E-commerce --- */",
+        "checkout=", "checkout_url=", "payment_url=", "success_url=", "error_url=", "cancel_url=",
+        "fail_url=", "origin=", "domain=", "host=", "site=", "location=", "loc=", "ref=",
+        "reference=", "request=", "req=", "val=", "validate=", "window=",
+        
+        "/* --- Endpoints Legados e CGI --- */",
+        "cgi-bin/redirect.cgi", "cgi-bin/redirect.cgi?", "view=", "show=", "feed=", "dir=",
+        "folder=", "folder_url=", "port=", "html=", "u=", "r="
+    ]
+}
