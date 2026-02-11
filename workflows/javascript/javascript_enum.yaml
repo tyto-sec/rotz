@@ -13,7 +13,7 @@ modules:
 
     - name: dir_creation
       cmds: 
-      - mkdir -p {{OUTPUT_PATH}}/content/javascript 
+      - mkdir -p {{OUTPUT_PATH}}/content/javascript && touch {{OUTPUT_PATH}}/content/javascript/all.javascript.txt
 
     - name: subjs_enum
       cmds: 
