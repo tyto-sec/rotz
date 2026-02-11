@@ -1,11 +1,11 @@
 vars:
   OUTPUT_PATH: output/vuln
-  SUBDOMAINS: output/vuln/subs/all.live.subs.txt
+  LIVE_SUBS: output/vuln/subs/all.live.subs.txt
   URLS: output/vuln/content/urls/all.urls.txt
   NOTIFY: true
   ACTIVE: false
 
-parallel: true
+parallel: false
 modules:
 
   - name: dir_creation
@@ -19,31 +19,31 @@ modules:
 
   - name: gowitness_screenshots
     cmds: 
-    - bash workflows/content/src/gowitness_screenshots.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+    - bash workflows/content/src/gowitness_screenshots.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
 
   - name: gowitness_enum
     cmds: 
-    - bash workflows/content/src/gowitness_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+    - bash workflows/content/src/gowitness_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
 
   - name: aquatone_screenshots
     cmds: 
-    - bash workflows/content/src/aquatone_screenshots.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+    - bash workflows/content/src/aquatone_screenshots.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
 
   - name: gau_enum
     cmds: 
-    - bash workflows/content/src/gau_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}' 
-
+    - bash workflows/content/src/gau_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}' 
+    
   - name: katana_enum
     cmds: 
-    - if {{ACTIVE}}; then bash workflows/content/src/katana_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'; fi
+    - if {{ACTIVE}}; then bash workflows/content/src/katana_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'; fi
 
   - name: paramspider_enum
     cmds: 
-    - bash workflows/content/src/paramspider_enum.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}'
+    - bash workflows/content/src/paramspider_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
 
-  - name: arjun_enum
-    cmds: 
-    - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+  # - name: arjun_enum
+  #   cmds: 
+  #   - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
 
   - name: httpx_resolution
     cmds: 

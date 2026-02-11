@@ -1,12 +1,12 @@
 vars:
   OUTPUT_PATH: output/vuln
-  URLS: output/vuln/content/urls/all.urls.txt
+  LIVE_URLS: output/vuln/content/urls/all.live.urls.txt
   JAVASCRIPT: output/vuln/content/javascript/all.javascript.txt
   NOTIFY: true
   ACTIVE: false
   RECURSION: false
   NUCLEI: false
-  DOWNLOAD: false
+  JAVASCRIPT_DOWNLOAD: false
 
 parallel: false
 modules:
@@ -17,7 +17,7 @@ modules:
 
     - name: subjs_enum
       cmds: 
-      - bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/javascript/src/subjs_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'
 
     - name: katana_enum
       cmds: 
@@ -29,7 +29,7 @@ modules:
 
     - name: subjs_enum
       cmds: 
-      - bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/javascript/src/subjs_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'
 
     - name: katana_enum
       cmds: 
@@ -41,7 +41,7 @@ modules:
 
     - name: subjs_enum
       cmds: 
-      - if {{RECURSION}}; then bash workflows/javascript/src/subjs_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+      - if {{RECURSION}}; then bash workflows/javascript/src/subjs_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'; fi
 
     - name: katana_enum
       cmds: 
@@ -53,19 +53,15 @@ modules:
 
     - name: download_javascript
       cmds:
-      - if {{DOWNLOAD}}; then bash workflows/javascript/src/download_js_files.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
+      - if {{JAVASCRIPT_DOWNLOAD}}; then bash workflows/javascript/src/download_js_files.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
 
-    - name: arjun_enum
-      cmds: 
-      - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
-
-    - name: httpx_resolution
-      cmds: 
-      - if {{RECURSION}}; then bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
-
+    # - name: arjun_enum
+    #   cmds: 
+    #   - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/content/src/arjun_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'; fi
+    
     - name: uro_cleaning
       cmds: 
-      - bash workflows/content/src/uro_cleaning.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+      - bash workflows/content/src/uro_cleaning.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'
 
     - name: unfurl_enum
       cmds: 

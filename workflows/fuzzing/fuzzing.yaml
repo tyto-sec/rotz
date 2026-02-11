@@ -1,6 +1,6 @@
 vars:
   OUTPUT_PATH: output/vuln
-  SUBS: output/vuln/subs/all.live.subs.txt
+  LIVE_SUBS: output/vuln/subs/all.live.subs.txt
   FUZZING_URLS: output/vuln/content/urls/fuzzing/ffuf.urls.txt
   PATH_WORDLIST: output/vuln/content/wordlists/all.paths.txt
   WORDS_WORDLIST: output/vuln/content/wordlists/fuzzing.word.list
@@ -15,11 +15,10 @@ modules:
     cmds:
       - |
         mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing
-        touch {{OUTPUT_PATH}}/content/urls/fuzzing/ffuf.urls.txt
 
   - name: cewl_wordlist_generation
     cmds:
-      - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{SUBS}} {{OUTPUT_PATH}}
+      - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{LIVE_SUBS}} {{OUTPUT_PATH}}
 
   - name: extract_words_from_paths
     cmds:
@@ -31,12 +30,12 @@ modules:
 
   - name: gobuster_fuzzing
     cmds:
-      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_fuzzing.sh {{SUBS}} {{OUTPUT_PATH}} {{WORDS_WORDLIST}} {{NOTIFY}}; fi
+      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_fuzzing.sh {{LIVE_SUBS}} {{OUTPUT_PATH}} {{WORDS_WORDLIST}} {{NOTIFY}}; fi
   
   - name: vhost_fuzzing
     cmds:
-      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_vhost_fuzzing.sh {{SUBS}} {{OUTPUT_PATH}} {{SUBDOMAINS_WORDLIST}} {{NOTIFY}}; fi
+      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_vhost_fuzzing.sh {{LIVE_SUBS}} {{OUTPUT_PATH}} {{SUBDOMAINS_WORDLIST}} {{NOTIFY}}; fi
 
   - name: git_enum
     cmds:
-      - mkdir -p {{OUTPUT_PATH}}/content/git && if {{ACTIVE}}; goop -l {{SUBS}} -f {{OUTPUT_PATH}}/content/git; fi
+      - mkdir -p {{OUTPUT_PATH}}/content/git && if {{ACTIVE}}; goop -l {{LIVE_SUBS}} -f {{OUTPUT_PATH}}/content/git; fi
