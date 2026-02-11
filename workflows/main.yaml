@@ -1,63 +1,57 @@
 vars:
-  DOMAINS_PATH: "/app/domains/domains.txt"
-  OUTPUT_PATH: "/app/output"
-  ORGANIZATION: "nasa"
+  OUTPUT_PATH: "/app/output/vuln2"
+  DOMAINS: "/app/input/vuln/domains.txt"
+  IPS: "/app/input/vuln/ips.txt"
+  ORGANIZATION: "vulnweb"
+  LIVE_SUBS: "/app/output/vuln2/subs/all.live.subs.txt"
+  SUBDOMAINS: "/app/output/vuln2/subs/all.subs.txt"
+  URLS: "/app/output/vuln2/content/urls/all.urls.txt"
+  JAVASCRIPT: "/app/output/vuln2/content/javascript/all.javascript.txt"
+  FUZZING_URLS: "/app/output/vuln2/content/urls/fuzzing/ffuf.urls.txt"
+  PATH_WORDLIST: "/app/output/vuln2/content/wordlists/all.paths.txt"
+  WORDS_WORDLIST: "/app/output/vuln2/content/wordlists/fuzzing.word.list"
+  SUBDOMAINS_WORDLIST: "/app/wordlists/subdomains/subdomains-top1million-5000.txt"
+  NOTIFY: true
+  ACTIVE: false
+  RECURSION: false
+  NUCLEI: false
+  JAVASCRIPT_DOWNLOAD: false
 
 parallel: false
 modules:
 
   - name: subdomain_enum
     cmds:
-      - rayder -q -w workflows/subdomains/subdomain_enum.yaml DOMAINS_PATH={{DOMAINS_PATH}} OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/subdomains/subdomain_enum.yaml DOMAINS={{DOMAINS}} OUTPUT_PATH={{OUTPUT_PATH}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}} WORDLIST={{WORDLIST}} RECURSION={{RECURSION}}
+
+  - name: organization_enum
+    cmds:
+      - rayder -q -w workflows/organization/organization_enum.yaml ORGANIZATION={{ORGANIZATION}} OUTPUT_PATH={{OUTPUT_PATH}} NOTIFY={{NOTIFY}}
 
   - name: infrastructure_enum
     cmds:
-      - rayder -q -w workflows/infrastructure/infrastructure_enum.yaml ORGANIZATION={{ORGANIZATION}} OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/infrastructure/infrastructure_enum.yaml ORGANIZATION={{ORGANIZATION}} OUTPUT_PATH={{OUTPUT_PATH}} IPS={{IPS}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}
 
   - name: dns_enum
     cmds:
-      - rayder -q -w workflows/subdomains/dns_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}}
-
-  - name: recursive_subdomain_enum
-    cmds:
-      - rayder -q -w workflows/subdomains/recursive_subdomain_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/dns/dns_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} IPs={{OUTPUT_PATH}}/ips/all.ips.txt NOTIFY={{NOTIFY}}
 
   - name: subdomain_resolution
     cmds:
-      - rayder -q -w workflows/subdomains/subdomain_resolution.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/probing/subdomain_resolution.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}
 
   - name: content_enumeration
     cmds:
-      - rayder -q -w workflows/content/content_enumeration.yaml OUTPUT_PATH={{OUTPUT_PATH}}
+      - rayder -q -w workflows/content/content_enumeration.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{LIVE_SUBS}} URLS={{URLS}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}}
   
   - name: javascript_enum
     cmds:
-      - echo "Recursive JavaScript Enumeration..."
+      - rayder -q -w workflows/javascript/javascript_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} URLS={{URLS}} JAVASCRIPT={{JAVASCRIPT}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}} RECURSION={{RECURSION}} NUCLEI={{NUCLEI}} DOWNLOAD={{JAVASCRIPT_DOWNLOAD}}
 
-  - name: first_fuzzing
+  - name: fuzzing
     cmds:
-      - echo "First Level Fuzzing..."
+      - rayder -q -w workflows/fuzzing/fuzzing.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBS={{SUBS}} FUZZING_URLS={{FUZZING_URLS}} PATH_WORDLIST={{PATH_WORDLIST}} WORDS_WORDLIST={{WORDS_WORDLIST}} SUBDOMAINS_WORDLIST={{SUBDOMAINS_WORDLIST}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
 
-  - name: recursive_content_enum
+  - name: vulnerability_scan
     cmds:
-      - echo "Recursive Content Enumeration..."
-
-  - name: recursive_javascript_enum
-    cmds:
-      - echo "Recursive JavaScript Enumeration..."
-
-  - name: second_fuzzing
-    cmds:
-      - echo "Second Level Fuzzing..."
-
-  - name: xss_enum
-    cmds:
-      - echo "XSS Enumeration..."
-
-  - name: information_disclosure_enum
-    cmds:
-      - echo "Information Disclosure Enumeration..."
-
-  - name: param_enum
-    cmds:
-      - echo "Redirect and File Inclusion Enumeration... (use gf patterns later...)"
+      - rayder -q -w workflows/vulns/vulnerability_scan.yaml OUTPUT_PATH={{OUTPUT_PATH}} URLS={{URLS}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}

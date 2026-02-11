@@ -13,6 +13,7 @@ services:
       - ./workflows:/app/workflows
       - ./wordlists:/app/wordlists
       - ./output:/app/output
+      - ./gf:/app/gf
     stdin_open: true
     tty: true
     command: /bin/bash

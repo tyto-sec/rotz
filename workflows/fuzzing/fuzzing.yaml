@@ -6,28 +6,28 @@ vars:
   WORDS_WORDLIST: output/vuln/content/wordlists/fuzzing.word.list
   SUBDOMAINS_WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
   ACTIVE: true
-  NOTIFY: true
+  NOTIFY: false
 
 parallel: false
 modules: 
 
-  # - name: create_dirs
-  #   cmds:
-  #     - |
-  #       mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing
-  #       touch {{OUTPUT_PATH}}/content/urls/fuzzing/ffuf.urls.txt
+  - name: create_dirs
+    cmds:
+      - |
+        mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing
+        touch {{OUTPUT_PATH}}/content/urls/fuzzing/ffuf.urls.txt
 
-  # - name: cewl_wordlist_generation
-  #   cmds:
-  #     - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{SUBS}} {{OUTPUT_PATH}}
+  - name: cewl_wordlist_generation
+    cmds:
+      - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{SUBS}} {{OUTPUT_PATH}}
 
-  # - name: extract_words_from_paths
-  #   cmds:
-  #     - bash workflows/fuzzing/src/extract_words_from_paths.sh {{PATH_WORDLIST}} {{OUTPUT_PATH}}
+  - name: extract_words_from_paths
+    cmds:
+      - bash workflows/fuzzing/src/extract_words_from_paths.sh {{PATH_WORDLIST}} {{OUTPUT_PATH}}
 
-  # - name: concatanate_wordlists
-  #   cmds:
-  #     - cat {{OUTPUT_PATH}}/content/wordlists/cewl.word.list {{OUTPUT_PATH}}/content/wordlists/paths.word.list | anew {{OUTPUT_PATH}}/content/wordlists/fuzzing.word.list
+  - name: concatanate_wordlists
+    cmds:
+      - cat {{OUTPUT_PATH}}/content/wordlists/cewl.word.list {{OUTPUT_PATH}}/content/wordlists/paths.word.list | anew {{OUTPUT_PATH}}/content/wordlists/fuzzing.word.list
 
   - name: gobuster_fuzzing
     cmds:
@@ -36,3 +36,7 @@ modules:
   - name: vhost_fuzzing
     cmds:
       - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_vhost_fuzzing.sh {{SUBS}} {{OUTPUT_PATH}} {{SUBDOMAINS_WORDLIST}} {{NOTIFY}}; fi
+
+  - name: git_enum
+    cmds:
+      - mkdir -p {{OUTPUT_PATH}}/content/git && if {{ACTIVE}}; goop -l {{SUBS}} -f {{OUTPUT_PATH}}/content/git; fi

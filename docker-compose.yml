@@ -10,5 +10,6 @@ services:
       - ./workflows:/app/workflows
       - ./wordlists:/app/wordlists
       - ./output:/app/output
+      - ./gf:/app/gf
     command: ["-w", "/app/workflows/main.yaml"]
     restart: on-failure
