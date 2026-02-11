@@ -12,10 +12,10 @@ vars:
   WORDS_WORDLIST: "/app/output/vuln2/content/wordlists/fuzzing.word.list"
   SUBDOMAINS_WORDLIST: "/app/wordlists/subdomains/subdomains-top1million-5000.txt"
   NOTIFY: true
-  ACTIVE: false
-  RECURSION: false
-  NUCLEI: false
-  JAVASCRIPT_DOWNLOAD: false
+  ACTIVE: true
+  RECURSION: true
+  NUCLEI: true
+  JAVASCRIPT_DOWNLOAD: true
 
 parallel: false
 modules:
