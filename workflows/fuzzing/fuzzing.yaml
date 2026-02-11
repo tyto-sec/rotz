@@ -14,7 +14,7 @@ modules:
   - name: create_dirs
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing
+        mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing && mkdir -p {{OUTPUT_PATH}}/content/wordlists/fuzzing && mkdir -p {{OUTPUT_PATH}}/content/git
 
   - name: cewl_wordlist_generation
     cmds:
