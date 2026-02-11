@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   test-environment:
+    image: hunter_debug
     build:
       context: .
       dockerfile: Dockerfile.test
@@ -14,6 +15,7 @@ services:
       - ./wordlists:/app/wordlists
       - ./output:/app/output
       - ./gf:/app/gf
+      - ./scripts:/app/scripts
     stdin_open: true
     tty: true
     command: /bin/bash

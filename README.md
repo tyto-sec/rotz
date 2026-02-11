@@ -89,6 +89,7 @@ docker run -it \
 	-v $(pwd)/wordlists:/app/wordlists \
 	-v $(pwd)/output:/app/output \
     -v $(pwd)/gf:/app/gf \
+	-v $(pwd)/scripts:/app/scripts \
 	raydersonthestorm-test-environment bash
 ```
 

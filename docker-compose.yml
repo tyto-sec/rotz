@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   rayders-on-the-storm:
+    image: hunter_debug
     build: .
+    container_name: hunter_debug
     env_file:
       - .env
     volumes:
@@ -11,5 +13,6 @@ services:
       - ./wordlists:/app/wordlists
       - ./output:/app/output
       - ./gf:/app/gf
+      - ./scripts:/app/scripts
     command: ["-w", "/app/workflows/main.yaml"]
     restart: on-failure

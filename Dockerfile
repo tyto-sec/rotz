@@ -21,7 +21,7 @@ COPY config/puredns/resolvers.txt /root/.config/puredns/resolvers.txt
 
 WORKDIR /app
 
-VOLUME ["/app/output", "/app/input", "/app/workflows", "/app/wordlists",  "/app/gf"]
+VOLUME ["/app/output", "/app/input", "/app/workflows", "/app/wordlists",  "/app/gf", "/app/scripts"]
 
 ENTRYPOINT ["rayder"]
 CMD ["-w", "/app/workflows/main.yaml"]
