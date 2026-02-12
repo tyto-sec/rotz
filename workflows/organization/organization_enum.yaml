@@ -12,6 +12,7 @@ modules:
       - |
         mkdir -p {{OUTPUT_PATH}}/subs/subdomains
         touch {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt
+        mkdir -p {{OUTPUT_PATH}}/ips
         touch {{OUTPUT_PATH}}/ips/all.ips.txt
 
   - name: asn_discovery
