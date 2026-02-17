@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# Removemos o -e ou tratamos o comando especificamente
+set -uo pipefail 
 
 aquatone_screenshots() {
     local subs_file="${1:-}"
@@ -10,6 +11,7 @@ aquatone_screenshots() {
         return 1
     fi
 
+    # ... (manteve a lógica de busca do arquivo) ...
     if [[ ! -f "${subs_file}" ]]; then
         local script_dir
         local repo_root
@@ -26,10 +28,13 @@ aquatone_screenshots() {
     local screenshots_dir="${output_path}/content/screenshots/aquatone"
     mkdir -p "${screenshots_dir}"
 
+    # Adicionamos "|| true" ao final para garantir que o exit code seja sempre 0
     cat "${subs_file}" | \
-        aquatone -out "${screenshots_dir}" -scan-timeout 5000 -http-timeout 5000 -threads 200
+        aquatone -out "${screenshots_dir}" -scan-timeout 5000 -http-timeout 5000 -threads 200 || echo "Aquatone finalizou com erros, mas continuando workflow..."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
     aquatone_screenshots "$@"
+    # Força saída com sucesso para o orquestrador (YAML) não parar
+    exit 0
 fi
