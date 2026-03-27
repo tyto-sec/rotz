@@ -65,7 +65,7 @@
           export ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH=go1.25
           export LC_ALL=C
           export LANG=C.UTF-8
-          eport CGO_ENABLED=1 
+          export CGO_ENABLED=1 
         mode: '0644'
 
     - name: Install MassDNS from source
@@ -117,6 +117,7 @@
         src: "{{ gopath }}/bin/{{ item }}"
         dest: "/usr/local/bin/{{ item }}"
         state: link
+        force: yes
       loop: [anew, subfinder, chaos, httpx, gowitness, naabu, dnsx, nuclei, notify, qsreplace, unfurl, gau, gf, subjs, hakrevdns, metabigor, rayder, puredns, sdlookup, katana, ffuf, goop, gobuster, dalfox]
 
     - name: Install Aquatone
