@@ -1,4 +1,22 @@
 vars:
+  INPUT_DOMAINS: ${ROOT}/input/hackthissite/domains.txt
+  INPUT_ORGANIZATION: "HackThisSite"
+
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
+  SUBDOMAIN_NOTIFY: true
+  SUBDOMAIN_BRUTEFORCE: true
+  SUBDOMAIN_WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
+  SUBDOMAIN_SCRIPTS_FOLDER: ${ROOT}/workflows/subdomains/src
+  SUBDOMAIN_WORKFLOWS_FOLDER: ${ROOT}/workflows/subdomains
+
+  ORGANIZATION_NOTIFY: false
+  ORGANIZATION_WORKFLOWS_FOLDER: ${ROOT}/workflows/organization
+  ORGANIZATION_SCRIPTS_FOLDER: ${ROOT}/workflows/organization/src
+  ORGANIZATION_SCAN: false
+
+  IPS_OUTPUT_PATH: ${ROOT}/output/hackthissite/ips
+
+
   OUTPUT_PATH: "/app/output/vuln4"
   DOMAINS: "/app/input/vuln/domains.txt"
   IPS: "/app/input/vuln/ips.txt"
@@ -23,36 +41,36 @@ modules:
 
   - name: subdomain_enum
     cmds:
-      - rayder -q -w workflows/subdomains/subdomain_enum.yaml DOMAINS={{DOMAINS}} OUTPUT_PATH={{OUTPUT_PATH}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}} WORDLIST={{WORDLIST}} RECURSION={{RECURSION}}
+      - rayder -q -w {{SUBDOMAIN_WORKFLOWS_FOLDER}}/subdomain_enum.yaml INPUT_DOMAINS={{INPUT_DOMAINS}} SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} SUBDOMAIN_NOTIFY={{SUBDOMAIN_NOTIFY}} SUBDOMAIN_BRUTEFORCE={{SUBDOMAIN_BRUTEFORCE}} SUBDOMAIN_WORDLIST={{SUBDOMAIN_WORDLIST}} SUBDOMAIN_SCRIPTS_FOLDER={{SUBDOMAIN_SCRIPTS_FOLDER}} SUBDOMAIN_WORKFLOWS_FOLDER={{SUBDOMAIN_WORKFLOWS_FOLDER}}
 
   - name: organization_enum
     cmds:
-      - rayder -q -w workflows/organization/organization_enum.yaml ORGANIZATION={{ORGANIZATION}} OUTPUT_PATH={{OUTPUT_PATH}} NOTIFY={{NOTIFY}} DOMAINS={{DOMAINS}}
+      - if [ "{{ORGANIZATION_SCAN}}" = "true" ]; then rayder -q -w {{ORGANIZATION_WORKFLOWS_FOLDER}}/organization_enum.yaml INPUT_DOMAINS={{INPUT_DOMAINS}} INPUT_ORGANIZATION={{INPUT_ORGANIZATION}} IPS_OUTPUT_PATH={{IPS_OUTPUT_PATH}} ORGANIZATION_NOTIFY={{ORGANIZATION_NOTIFY}} ORGANIZATION_WORKFLOWS_FOLDER={{ORGANIZATION_WORKFLOWS_FOLDER}} ORGANIZATION_SCRIPTS_FOLDER={{ORGANIZATION_SCRIPTS_FOLDER}} ; fi
 
-  - name: infrastructure_enum
-    cmds:
-      - rayder -q -w workflows/infrastructure/infrastructure_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} IPS={{IPS}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}
+  # - name: infrastructure_enum
+  #   cmds:
+  #     - rayder -q -w workflows/infrastructure/infrastructure_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} IPS={{IPS}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}
 
-  - name: dns_enum
-    cmds:
-      - rayder -q -w workflows/dns/dns_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} IPs={{OUTPUT_PATH}}/ips/all.ips.txt NOTIFY={{NOTIFY}}
+  # - name: dns_enum
+  #   cmds:
+  #     - rayder -q -w workflows/dns/dns_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} IPs={{OUTPUT_PATH}}/ips/all.ips.txt NOTIFY={{NOTIFY}}
 
-  - name: subdomain_resolution
-    cmds:
-      - rayder -q -w workflows/probing/subdomain_resolution.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}
+  # - name: subdomain_resolution
+  #   cmds:
+  #     - rayder -q -w workflows/probing/subdomain_resolution.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}
 
-  - name: content_enumeration
-    cmds:
-      - rayder -q -w workflows/content/content_enumeration.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_SUBS={{LIVE_SUBS}} URLS={{URLS}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}}
+  # - name: content_enumeration
+  #   cmds:
+  #     - rayder -q -w workflows/content/content_enumeration.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_SUBS={{LIVE_SUBS}} URLS={{URLS}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}}
   
-  - name: javascript_enum
-    cmds:
-      - rayder -q -w workflows/javascript/javascript_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_URLS={{LIVE_URLS}} JAVASCRIPT={{JAVASCRIPT}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}} RECURSION={{RECURSION}} NUCLEI={{NUCLEI}} JAVASCRIPT_DOWNLOAD={{JAVASCRIPT_DOWNLOAD}}
+  # - name: javascript_enum
+  #   cmds:
+  #     - rayder -q -w workflows/javascript/javascript_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_URLS={{LIVE_URLS}} JAVASCRIPT={{JAVASCRIPT}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}} RECURSION={{RECURSION}} NUCLEI={{NUCLEI}} JAVASCRIPT_DOWNLOAD={{JAVASCRIPT_DOWNLOAD}}
 
-  - name: fuzzing
-    cmds:
-      - rayder -q -w workflows/fuzzing/fuzzing.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_SUBS={{LIVE_SUBS}} FUZZING_URLS={{FUZZING_URLS}} PATH_WORDLIST={{PATH_WORDLIST}} WORDS_WORDLIST={{WORDS_WORDLIST}} SUBDOMAINS_WORDLIST={{SUBDOMAINS_WORDLIST}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
+  # - name: fuzzing
+  #   cmds:
+  #     - rayder -q -w workflows/fuzzing/fuzzing.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_SUBS={{LIVE_SUBS}} FUZZING_URLS={{FUZZING_URLS}} PATH_WORDLIST={{PATH_WORDLIST}} WORDS_WORDLIST={{WORDS_WORDLIST}} SUBDOMAINS_WORDLIST={{SUBDOMAINS_WORDLIST}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
 
-  - name: vulnerability_scan
-    cmds:
-      - rayder -q -w workflows/vulns/vulnerability_scan.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_URLS={{LIVE_URLS}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
+  # - name: vulnerability_scan
+  #   cmds:
+  #     - rayder -q -w workflows/vulns/vulnerability_scan.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_URLS={{LIVE_URLS}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
