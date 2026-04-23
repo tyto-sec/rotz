@@ -1,14 +1,14 @@
-# Rayders On The Storm
+# Rotz
 
-![Rayders On The Storm](./img/rayders.png)
+![Rotz](./img/rayders.png)
 
 <div align="center">
 
-![last commit](https://img.shields.io/github/last-commit/tyto-sec/RaydersOnTheStorm) ![created](https://img.shields.io/github/created-at/tyto-sec/RaydersOnTheStorm) ![language](https://img.shields.io/github/languages/top/tyto-sec/RaydersOnTheStorm) ![stars](https://img.shields.io/github/stars/tyto-sec/RaydersOnTheStorm)
+![last commit](https://img.shields.io/github/last-commit/tyto-sec/rotz) ![created](https://img.shields.io/github/created-at/tyto-sec/rotz) ![language](https://img.shields.io/github/languages/top/tyto-sec/rotz) ![stars](https://img.shields.io/github/stars/tyto-sec/rotz)
 
 </div>
 
-> **Rayders On The Storm** is a modular recon and vulnerability automation framework that chains subdomain discovery, DNS analysis, live probing, content enumeration, JavaScript analysis, fuzzing, and vulnerability filtering into a reproducible workflow.
+> **Rotz** is a modular recon and vulnerability automation framework that chains subdomain discovery, DNS analysis, live probing, content enumeration, JavaScript analysis, fuzzing, and vulnerability filtering into a reproducible workflow.
 
 <br>
 

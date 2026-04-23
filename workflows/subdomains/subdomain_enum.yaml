@@ -1,10 +1,9 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  DOMAINS: input/vuln/domains.txt
-  NOTIFY: true
-  ACTIVE: false
-  WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
-  RECURSION: false
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
+  INPUT_DOMAINS: ${ROOT}/input/hackthissite/domains.txt
+  SUBDOMAIN_NOTIFY: true
+  SUBDOMAIN_BRUTEFORCE: true
+  WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
 
 parallel: false
 modules:
@@ -12,33 +11,25 @@ modules:
   - name: create_dirs
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/subs
-        touch {{OUTPUT_PATH}}/subs/all.subs.txt
+        mkdir -p {{SUBDOMAIN_OUTPUT_PATH}}
+        touch {{SUBDOMAIN_OUTPUT_PATH}}/all.subs.txt
 
   - name: subfinder_enum
     cmds:
-      - bash workflows/subdomains/src/subfinder_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+      - bash workflows/subdomains/src/subfinder_enum.sh '{{INPUT_DOMAINS}}' '{{SUBDOMAIN_OUTPUT_PATH}}' '{{SUBDOMAIN_NOTIFY}}'
   
   - name: chaos_enum
     cmds:
-      - bash workflows/subdomains/src/chaos_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+      - bash workflows/subdomains/src/chaos_enum.sh '{{INPUT_DOMAINS}}' '{{SUBDOMAIN_OUTPUT_PATH}}' '{{SUBDOMAIN_NOTIFY}}'
 
   - name: github_enum
     cmds:
-      - bash workflows/subdomains/src/github_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+      - bash workflows/subdomains/src/github_enum.sh '{{INPUT_DOMAINS}}' '{{SUBDOMAIN_OUTPUT_PATH}}' '{{SUBDOMAIN_NOTIFY}}'
 
   - name: puredns_enum
     cmds:
-      - if {{ACTIVE}}; then bash workflows/subdomains/src/puredns_enum.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' '{{WORDLIST}}'; fi
+      - if {{SUBDOMAIN_BRUTEFORCE}}; then bash workflows/subdomains/src/puredns_enum.sh '{{INPUT_DOMAINS}}' '{{SUBDOMAIN_OUTPUT_PATH}}' '{{SUBDOMAIN_NOTIFY}}' '{{WORDLIST}}'; fi
 
   - name: clean_all_subs
     cmds:
-      - python3 workflows/subdomains/src/clean_domains.py {{OUTPUT_PATH}}/subs/all.subs.txt
-
-  - name: subfinder_recursive_enum
-    cmds:
-      - if {{RECURSION}}; then bash workflows/subdomains/src/subfinder_enum.sh '{{OUTPUT_PATH}}/subs/all.subs.txt' '{{OUTPUT_PATH}}'; fi
-  
-  - name: chaos_recursive_enum
-    cmds:
-      - if {{RECURSION}}; then bash workflows/subdomains/src/chaos_enum.sh '{{OUTPUT_PATH}}/subs/all.subs.txt' '{{OUTPUT_PATH}}'; fi
+      - python3 workflows/subdomains/src/clean_domains.py {{SUBDOMAIN_OUTPUT_PATH}}/all.subs.txt
