@@ -1,8 +1,11 @@
 vars:
-  ORGANIZATION: "tesla"
-  OUTPUT_PATH: output/tesla
-  DOMAINS: input/tesla/domains.txt
-  NOTIFY: true
+  INPUT_DOMAINS: ${ROOT}/input/tesla/domains.txt
+  INPUT_ORGANIZATION: "Tesla"
+  IPS_OUTPUT_PATH: ${ROOT}/output/tesla/ips
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/tesla/subs
+  ORGANIZATION_NOTIFY: false
+  ORGANIZATION_WORKFLOWS_FOLDER: ${ROOT}/workflows/organization
+  ORGANIZATION_SCRIPTS_FOLDER: ${ROOT}/workflows/organization/src
 
 parallel: false
 modules:
@@ -10,19 +13,11 @@ modules:
   - name: create_dirs
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/subs/subdomains
-        touch {{OUTPUT_PATH}}/subs/subdomains/all.subs.txt
-        mkdir -p {{OUTPUT_PATH}}/ips
-        touch {{OUTPUT_PATH}}/ips/all.ips.txt
+        mkdir -p {{SUBDOMAIN_OUTPUT_PATH}}
+        touch {{SUBDOMAIN_OUTPUT_PATH}}/all.subs.txt
+        mkdir -p {{IPS_OUTPUT_PATH}}
+        touch {{IPS_OUTPUT_PATH}}/all.ips.txt
 
   - name: asn_discovery
     cmds:
-      - bash workflows/organization/src/asn_discovery.sh '{{ORGANIZATION}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
-  
-  - name: certs_discovery
-    cmds:
-      - bash workflows/organization/src/certs_discovery.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
-
-  - name: google_analytics_discovery
-    cmds:
-      - bash workflows/organization/src/google_analytics_discovery.sh '{{DOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+      - python3 {{ORGANIZATION_SCRIPTS_FOLDER}}/asn_discovery.py "{{INPUT_ORGANIZATION}}" "{{IPS_OUTPUT_PATH}}" "{{ORGANIZATION_NOTIFY}}"

@@ -1,11 +1,11 @@
 vars:
-  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
   INPUT_DOMAINS: ${ROOT}/input/hackthissite/domains.txt
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
   SUBDOMAIN_NOTIFY: true
   SUBDOMAIN_BRUTEFORCE: true
   SUBDOMAIN_WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
-  SCRIPTS_FOLDER: ${ROOT}/workflows/subdomains/src
-  WORKFLOWS_FOLDER: ${ROOT}/workflows/subdomains
+  SUBDOMAIN_SCRIPTS_FOLDER: ${ROOT}/workflows/subdomains/src
+  SUBDOMAIN_WORKFLOWS_FOLDER: ${ROOT}/workflows/subdomains
 
 parallel: false
 modules:
@@ -18,8 +18,8 @@ modules:
 
   - name: subdomain_enum_parallel
     cmds:
-      - rayder -q -w {{WORKFLOWS_FOLDER}}/subdomain_enum_parallel.yaml SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} INPUT_DOMAINS={{INPUT_DOMAINS}} SUBDOMAIN_NOTIFY={{SUBDOMAIN_NOTIFY}} SUBDOMAIN_BRUTEFORCE={{SUBDOMAIN_BRUTEFORCE}} SUBDOMAIN_WORDLIST={{SUBDOMAIN_WORDLIST}} SCRIPTS_FOLDER={{SCRIPTS_FOLDER}}
+      - rayder -q -w {{SUBDOMAIN_WORKFLOWS_FOLDER}}/subdomain_enum_parallel.yaml SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} INPUT_DOMAINS={{INPUT_DOMAINS}} SUBDOMAIN_NOTIFY={{SUBDOMAIN_NOTIFY}} SUBDOMAIN_BRUTEFORCE={{SUBDOMAIN_BRUTEFORCE}} SUBDOMAIN_WORDLIST={{SUBDOMAIN_WORDLIST}} SUBDOMAIN_SCRIPTS_FOLDER={{SUBDOMAIN_SCRIPTS_FOLDER}}
 
   - name: clean_all_subs
     cmds:
-      - python3 {{SCRIPTS_FOLDER}}/clean_domains.py {{SUBDOMAIN_OUTPUT_PATH}}/all.subs.txt
+      - python3 {{SUBDOMAIN_SCRIPTS_FOLDER}}/clean_domains.py {{SUBDOMAIN_OUTPUT_PATH}}/all.subs.txt
