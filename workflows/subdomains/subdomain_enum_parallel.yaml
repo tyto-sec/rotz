@@ -1,0 +1,27 @@
+vars:
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
+  INPUT_DOMAINS: ${ROOT}/input/hackthissite/domains.txt
+  SUBDOMAIN_NOTIFY: true
+  SUBDOMAIN_BRUTEFORCE: true
+  SUBDOMAIN_WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
+  SCRIPTS_FOLDER: ${ROOT}/workflows/subdomains/src
+
+parallel: true
+modules:
+
+  - name: subfinder_enum
+    cmds:
+      - python3 {{SCRIPTS_FOLDER}}/subfinder_enum.py "{{INPUT_DOMAINS}}" "{{SUBDOMAIN_OUTPUT_PATH}}" "{{SUBDOMAIN_NOTIFY}}"
+  
+  - name: chaos_enum
+    cmds:
+      - python3 {{SCRIPTS_FOLDER}}/chaos_enum.py "{{INPUT_DOMAINS}}" "{{SUBDOMAIN_OUTPUT_PATH}}" "{{SUBDOMAIN_NOTIFY}}"
+
+  - name: github_enum
+    cmds:
+      - python3 {{SCRIPTS_FOLDER}}/github_enum.py "{{INPUT_DOMAINS}}" "{{SUBDOMAIN_OUTPUT_PATH}}" "{{SUBDOMAIN_NOTIFY}}"
+
+  - name: puredns_enum
+    cmds:
+      - if {{SUBDOMAIN_BRUTEFORCE}}; then python3 {{SCRIPTS_FOLDER}}/puredns_enum.py "{{INPUT_DOMAINS}}" "{{SUBDOMAIN_OUTPUT_PATH}}" "{{SUBDOMAIN_WORDLIST}}" "{{SUBDOMAIN_NOTIFY}}"; fi
+

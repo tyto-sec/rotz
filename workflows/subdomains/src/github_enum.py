@@ -21,7 +21,7 @@ def github_enum(domains_file, output_path, notify_enabled=False):
 
     # Ensure output_path is absolute
     output_path = os.path.abspath(output_path)
-    subs_dir = os.path.join(output_path, "subs")
+    subs_dir = output_path
     subs_file = os.path.join(subs_dir, "github.subs.txt")
     all_subs_file = os.path.join(subs_dir, "all.subs.txt")
     

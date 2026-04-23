@@ -19,7 +19,7 @@ def chaos_enum(domains_file, output_path, notify_enabled=False):
         logger.error(f"Domains file not found: {domains_file}")
         return
 
-    subs_dir = os.path.join(output_path, "subs")
+    subs_dir = output_path
     subs_file = os.path.join(subs_dir, "chaos.subs.txt")
     all_subs_file = os.path.join(subs_dir, "all.subs.txt")
     

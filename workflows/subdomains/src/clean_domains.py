@@ -6,7 +6,6 @@ from pathlib import Path
 def clean_domain(domain: str) -> str:
     domain = domain.strip()
     domain = re.sub(r'^https?://', '', domain)
-    domain = re.sub(r'^(\*\.|\*|www\.)+', '', domain)
     domain = domain.split('/')[0]
     domain = domain.split(':')[0]
     if domain.endswith('.'):
