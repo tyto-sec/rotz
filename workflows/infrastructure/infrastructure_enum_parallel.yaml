@@ -1,0 +1,18 @@
+vars:
+  INPUT_IPS: ${ROOT}/input/tesla/ips.txt
+  IPS_OUTPUT_PATH: ${ROOT}/output/tesla/ips
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/tesla/subs
+  INFRASTRUCTURE_NOTIFY: true
+  INFRASTRUCTURE_SCRIPTS_FOLDER: ${ROOT}/workflows/infrastructure/src
+  INFRASTRUCTURE_WORKFLOWS_FOLDER: ${ROOT}/workflows/infrastructure
+
+parallel: true
+modules:
+
+  - name: sdlookup_enum
+    cmds:
+      - python {{INFRASTRUCTURE_SCRIPTS_FOLDER}}/portscan_sdlookup.py "{{IPS_OUTPUT_PATH}}/all.ips.txt" "{{IPS_OUTPUT_PATH}}" "{{INFRASTRUCTURE_NOTIFY}}"
+
+  - name: naabu_portscan_ips
+    cmds:
+      - python3 {{INFRASTRUCTURE_SCRIPTS_FOLDER}}/portscan_naabu.py "{{IPS_OUTPUT_PATH}}/subdomains.resolved.ips.txt" "{{IPS_OUTPUT_PATH}}" "{{INFRASTRUCTURE_NOTIFY}}"

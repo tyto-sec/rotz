@@ -1,8 +1,10 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  IPS: input/vuln/ips.txt
-  NOTIFY: true
-  SUBDOMAINS: output/vuln/subs/all.subs.txt
+  INPUT_IPS: ${ROOT}/input/tesla/ips.txt
+  IPS_OUTPUT_PATH: ${ROOT}/output/tesla/ips
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/tesla/subs
+  INFRASTRUCTURE_NOTIFY: true
+  INFRASTRUCTURE_SCRIPTS_FOLDER: ${ROOT}/workflows/infrastructure/src
+  INFRASTRUCTURE_WORKFLOWS_FOLDER: ${ROOT}/workflows/infrastructure
 
 parallel: false
 modules:
@@ -10,19 +12,19 @@ modules:
   - name: create_dirs
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/ips
-        touch {{OUTPUT_PATH}}/ips/all.ips.txt
+        mkdir -p {{IPS_OUTPUT_PATH}}
+        touch {{IPS_OUTPUT_PATH}}/all.ips.txt
 
   - name: copy_ips
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/ips
-        cat {{IPS}} | anew {{OUTPUT_PATH}}/ips/all.ips.txt
+        mkdir -p {{IPS_OUTPUT_PATH}}
+        cat {{INPUT_IPS}} | anew {{IPS_OUTPUT_PATH}}/all.ips.txt
 
   - name: subdomain_resolution
     cmds:
-      - bash workflows/infrastructure/src/subdomain_resolution.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+      - python {{INFRASTRUCTURE_SCRIPTS_FOLDER}}/subdomain_resolution.py "{{SUBDOMAIN_OUTPUT_PATH}}" "{{IPS_OUTPUT_PATH}}" "{{INFRASTRUCTURE_NOTIFY}}"
 
-  - name: sdlookup_enum
+  - name: infrastructure_enum_parallel
     cmds:
-      - bash workflows/infrastructure/src/portscan_sdlookup.sh '{{OUTPUT_PATH}}/ips/all.ips.txt' '{{OUTPUT_PATH}}' '{{NOTIFY}}'
+      - rayder -q -w {{INFRASTRUCTURE_WORKFLOWS_FOLDER}}/infrastructure_enum_parallel.yaml INPUT_IPS={{INPUT_IPS}} IPS_OUTPUT_PATH={{IPS_OUTPUT_PATH}} SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} INFRASTRUCTURE_NOTIFY={{INFRASTRUCTURE_NOTIFY}} INFRASTRUCTURE_SCRIPTS_FOLDER={{INFRASTRUCTURE_SCRIPTS_FOLDER}} INFRASTRUCTURE_WORKFLOWS_FOLDER={{INFRASTRUCTURE_WORKFLOWS_FOLDER}} INFRASTRUCTURE_WORKFLOWS_FOLDER={{INFRASTRUCTURE_WORKFLOWS_FOLDER}}
