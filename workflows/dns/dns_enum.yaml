@@ -1,20 +1,20 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  SUBDOMAINS: output/vuln/subs/all.subs.txt
-  IPs: output/vuln/ips/all.ips.txt
-  NOTIFY: true
+  INPUT_DOMAINS: ${ROOT}/input/tesla/domains.txt
+  SUBDOMAIN_OUTPUT_FILE: ${ROOT}/output/tesla/subs/all.subs.txt
+  IPS_OUTPUT_FILE: ${ROOT}/output/tesla/ips/all.ips.txt
+  DNS_OUTPUT_PATH: ${ROOT}/output/tesla/dns
+  DNS_NOTIFY: true
+  DNS_SCRIPTS_FOLDER: ${ROOT}/workflows/dns/src
+  DNS_WORKFLOWS_FOLDER: ${ROOT}/workflows/dns
 
 parallel: false
 modules:
 
   - name: create_output_directory
     cmds:
-      - mkdir -p {{OUTPUT_PATH}}/dns
+      - mkdir -p {{DNS_OUTPUT_PATH}}
   
-  - name: dns_enum
+  - name: dns_enum_parallel
     cmds:
-      - bash workflows/dns/src/dns_enum.sh {{SUBDOMAINS}} {{OUTPUT_PATH}} {{NOTIFY}}
-
-  - name: revdns_enum
-    cmds:
-      - bash workflows/dns/src/revdns_enum.sh {{IPs}} {{OUTPUT_PATH}} {{NOTIFY}}
+      - rayder -q -w {{DNS_WORKFLOWS_FOLDER}}/dns_enum_parallel.yaml INPUT_DOMAINS={{INPUT_DOMAINS}} SUBDOMAIN_OUTPUT_FILE={{SUBDOMAIN_OUTPUT_FILE}} IPS_OUTPUT_FILE={{IPS_OUTPUT_FILE}} DNS_OUTPUT_PATH={{DNS_OUTPUT_PATH}} DNS_NOTIFY={{DNS_NOTIFY}} DNS_SCRIPTS_FOLDER={{DNS_SCRIPTS_FOLDER}} DNS_WORKFLOWS_FOLDER={{DNS_WORKFLOWS_FOLDER}}  
+  

@@ -3,6 +3,7 @@ vars:
   INPUT_ORGANIZATION: "HackThisSite"
 
   SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
+  SUBDOMAIN_OUTPUT_FILE: ${ROOT}/output/hackthissite/subs/all.subs.txt
   SUBDOMAIN_NOTIFY: true
   SUBDOMAIN_BRUTEFORCE: true
   SUBDOMAIN_WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
@@ -15,9 +16,14 @@ vars:
   ORGANIZATION_SCAN: false
 
   IPS_OUTPUT_PATH: ${ROOT}/output/hackthissite/ips
+  IPS_OUTPUT_FILE: ${ROOT}/output/hackthissite/ips/all.ips.txt
   INFRASTRUCTURE_SCRIPTS_FOLDER: ${ROOT}/workflows/infrastructure/src
   INFRASTRUCTURE_WORKFLOWS_FOLDER: ${ROOT}/workflows/infrastructure
   
+  DNS_OUTPUT_PATH: ${ROOT}/output/hackthissite/dns
+  DNS_NOTIFY: true
+  DNS_SCRIPTS_FOLDER: ${ROOT}/workflows/dns/src
+  DNS_WORKFLOWS_FOLDER: ${ROOT}/workflows/dns
 
   OUTPUT_PATH: "/app/output/vuln4"
   DOMAINS: "/app/input/vuln/domains.txt"
@@ -53,10 +59,10 @@ modules:
     cmds:
       - rayder -q -w {{INFRASTRUCTURE_WORKFLOWS_FOLDER}}/infrastructure_enum.yaml INPUT_IPS={{INPUT_IPS}} IPS_OUTPUT_PATH={{IPS_OUTPUT_PATH}} SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} INFRASTRUCTURE_NOTIFY={{NOTIFY}} INFRASTRUCTURE_SCRIPTS_FOLDER={{INFRASTRUCTURE_SCRIPTS_FOLDER}} INFRASTRUCTURE_WORKFLOWS_FOLDER={{INFRASTRUCTURE_WORKFLOWS_FOLDER}} INFRASTRUCTURE_WORKFLOWS_FOLDER={{INFRASTRUCTURE_WORKFLOWS_FOLDER}}
 
-  # - name: dns_enum
-  #   cmds:
-  #     - rayder -q -w workflows/dns/dns_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} IPs={{OUTPUT_PATH}}/ips/all.ips.txt NOTIFY={{NOTIFY}}
-
+  - name: dns_enum
+    cmds:
+      - rayder -q -w {{DNS_WORKFLOWS_FOLDER}}/dns_enum.yaml INPUT_DOMAINS={{INPUT_DOMAINS}} SUBDOMAIN_OUTPUT_FILE={{SUBDOMAIN_OUTPUT_FILE}} IPS_OUTPUT_FILE={{IPS_OUTPUT_FILE}} DNS_OUTPUT_PATH={{DNS_OUTPUT_PATH}} DNS_NOTIFY={{DNS_NOTIFY}} DNS_SCRIPTS_FOLDER={{DNS_SCRIPTS_FOLDER}} DNS_WORKFLOWS_FOLDER={{DNS_WORKFLOWS_FOLDER}}  
+  
   # - name: subdomain_resolution
   #   cmds:
   #     - rayder -q -w workflows/probing/subdomain_resolution.yaml OUTPUT_PATH={{OUTPUT_PATH}} SUBDOMAINS={{SUBDOMAINS}} NOTIFY={{NOTIFY}}

@@ -1,0 +1,21 @@
+vars:
+  INPUT_DOMAINS: ${ROOT}/input/tesla/domains.txt
+  SUBDOMAIN_OUTPUT_FILE: ${ROOT}/output/tesla/subs/all.subs.txt
+  IPS_OUTPUT_FILE: ${ROOT}/output/tesla/ips/all.ips.txt
+  DNS_OUTPUT_PATH: ${ROOT}/output/tesla/dns
+  DNS_NOTIFY: true
+  DNS_SCRIPTS_FOLDER: ${ROOT}/workflows/dns/src
+  DNS_WORKFLOWS_FOLDER: ${ROOT}/workflows/dns
+
+parallel: true
+modules:
+  
+  - name: dns_enum
+    cmds:
+      - python {{DNS_SCRIPTS_FOLDER}}/dns_enum.py {{SUBDOMAIN_OUTPUT_FILE}} {{DNS_OUTPUT_PATH}} {{DNS_NOTIFY}}
+
+  - name: revdns_enum
+    cmds:
+      - python3 {{DNS_SCRIPTS_FOLDER}}/revdns_enum.py "{{IPS_OUTPUT_FILE}}" "{{DNS_OUTPUT_PATH}}" "{{DNS_NOTIFY}}" "{{INPUT_DOMAINS}}"
+
+  
