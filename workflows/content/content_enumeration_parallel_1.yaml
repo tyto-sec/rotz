@@ -1,0 +1,29 @@
+vars:
+  CONTENT_OUTPUT_PATH: ${ROOT}/output/tesla/content
+  LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/tesla/subs/all.live.subs.txt
+  CONTENT_SCRIPTS_FOLDER: ${ROOT}/workflows/content/src
+  CONTENT_WORKFLOWS_FOLDER: ${ROOT}/workflows/content
+  CONTENT_ACTIVE: true
+
+parallel: true
+modules:
+
+  - name: gowitness_screenshots
+    cmds: 
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gowitness_screenshots.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}" 
+
+  - name: gowitness_enum
+    cmds: 
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gowitness_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
+
+  - name: aquatone_screenshots
+    cmds: 
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/aquatone_screenshots.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
+
+  - name: gau_enum
+    cmds: 
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gau_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}" 
+
+  - name: katana_enum
+    cmds: 
+    - if {{CONTENT_ACTIVE}}; then python3 {{CONTENT_SCRIPTS_FOLDER}}/katana_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"; fi

@@ -1,8 +1,12 @@
 vars:
-  CONTENT_OUTPUT_PATH: ${ROOT}/output/tesla/content
   LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/tesla/subs/all.live.subs.txt
-  LIVE_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
   ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
+  GAU_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.gau.urls.txt
+  KATANA_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.katana.urls.txt
+  PARAMS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.params.urls.txt
+  JS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.js.urls.txt
+  CLEANED_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.cleaned.urls.txt
+  CONTENT_OUTPUT_PATH: ${ROOT}/output/tesla/contentC
   CONTENT_NOTIFY: true
   CONTENT_ACTIVE: true
   CONTENT_SCRIPTS_FOLDER: ${ROOT}/workflows/content/src
@@ -18,44 +22,44 @@ modules:
       mkdir -p {{CONTENT_OUTPUT_PATH}}/tmp
       mkdir -p {{CONTENT_OUTPUT_PATH}}/screenshots
       mkdir -p {{CONTENT_OUTPUT_PATH}}/wordlists
-      touch {{CONTENT_OUTPUT_PATH}}/urls/all.urls.txt
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.live.urls.txt
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.gau.urls.txt
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.katana.urls.txt
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.params.urls.txt
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.cleaned.urls.txt
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.js.urls.txt
 
-  - name: gowitness_screenshots
+  - name: content_enumeration_parallel_1
     cmds: 
-    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gowitness_screenshots.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}" 
+    - rayder -q -w {{CONTENT_WORKFLOWS_FOLDER}}/content_enumeration_parallel_1.yaml CONTENT_OUTPUT_PATH="{{CONTENT_OUTPUT_PATH}}" LIVE_SUBDOOMAINS_FILE="{{LIVE_SUBDOOMAINS_FILE}}" CONTENT_SCRIPTS_FOLDER="{{CONTENT_SCRIPTS_FOLDER}}" CONTENT_WORKFLOWS_FOLDER="{{CONTENT_WORKFLOWS_FOLDER}}"  CONTENT_ACTIVE="{{CONTENT_ACTIVE}}"
 
-  - name: gowitness_enum
+  - name: copy_gau_urls_on_live_urls
     cmds: 
-    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gowitness_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
+    - cat "{{GAU_URLS_FILE}}" | anew "{{ALL_URLS_FILE}}";
 
-  - name: aquatone_screenshots
+  - name: copy_katana_urls_on_live_urls
     cmds: 
-    - python3 {{CONTENT_SCRIPTS_FOLDER}}/aquatone_screenshots.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
+    - if {{CONTENT_ACTIVE}}; then cat "{{KATANA_URLS_FILE}}" | anew "{{ALL_URLS_FILE}}"; fi
 
-  # - name: gau_enum
-  #   cmds: 
-  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/gau_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}" 
-    
-  # - name: katana_enum
-  #   cmds: 
-  #   - if {{CONTENT_ACTIVE}}; then python3 {{CONTENT_SCRIPTS_FOLDER}}/katana_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"; fi
+  - name: uro_cleaning
+    cmds: 
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/uro_cleaning.py "{{ALL_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
 
-  # - name: httpx_resolution
-  #   cmds: 
-  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/httpx_resolution.py "{{ALL_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
+  - name: get_parameter_urls_from_all_urls
+    cmds: 
+    - |
+      cat "{{CLEANED_URLS_FILE}}" | \
+      grep -E '\?' | \
+      grep -vE '=[a-zA-Z0-9+/]{50,}' | \
+      anew "{{PARAMS_URLS_FILE}}"
+  
+  - name: extract_js_urls
+    cmds: 
+    - |
+      cat "{{CLEANED_URLS_FILE}}" | \
+      grep -iE '\.js(\?|$)' | \
+      anew "{{JS_URLS_FILE}}"
 
-  # - name: paramspider_enum
-  #   cmds: 
-  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/paramspider_enum.py "{{LIVE_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
-
-  # - name: arjun_enum
-  #   cmds: 
-  #   - if {{CONTENT_ACTIVE}}; then python3 {{CONTENT_SCRIPTS_FOLDER}}/arjun_enum.py "{{LIVE_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"; fi
-
-  # - name: uro_cleaning
-  #   cmds: 
-  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/uro_cleaning.py "{{LIVE_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
-
-  # - name: unfurl_enum
-  #   cmds: 
-  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/unfurl_enum.py "{{CONTENT_OUTPUT_PATH}}"
+  - name: unfurl_enum
+    cmds: 
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/unfurl_enum.py "{{CLEANED_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"

@@ -30,6 +30,18 @@ vars:
   SUBDOMAIN_RESOLUTION_WORKFLOWS_FOLDER: ${ROOT}/workflows/probing
   LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/hackthissite/subs/all.live.subs.txt
 
+  CONTENT_OUTPUT_PATH: ${ROOT}/output/tesla/contentC
+  CONTENT_NOTIFY: true
+  CONTENT_ACTIVE: true
+  CONTENT_SCRIPTS_FOLDER: ${ROOT}/workflows/content/src
+  CONTENT_WORKFLOWS_FOLDER: ${ROOT}/workflows/content
+  CLEANED_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.cleaned.urls.txt
+  ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
+  GAU_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.gau.urls.txt
+  KATANA_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.katana.urls.txt
+  PARAMS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.params.urls.txt
+  JS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.js.urls.txt
+
   OUTPUT_PATH: "/app/output/vuln4"
   DOMAINS: "/app/input/vuln/domains.txt"
   IPS: "/app/input/vuln/ips.txt"
@@ -72,9 +84,9 @@ modules:
     cmds:
       - rayder -q -w {{SUBDOMAIN_RESOLUTION_WORKFLOWS_FOLDER}}/subdomain_resolution.yaml SUBDOMAIN_OUTPUT_FILE={{SUBDOMAIN_OUTPUT_FILE}} SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} SUBDOMAIN_RESOLUTION_NOTIFY={{SUBDOMAIN_RESOLUTION_NOTIFY}} SUBDOMAIN_RESOLUTION_SCRIPTS_FOLDER={{SUBDOMAIN_RESOLUTION_SCRIPTS_FOLDER}} SUBDOMAIN_RESOLUTION_WORKFLOWS_FOLDER={{SUBDOMAIN_RESOLUTION_WORKFLOWS_FOLDER}}
   
-  # - name: content_enumeration
-  #   cmds:
-  #     - rayder -q -w workflows/content/content_enumeration.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_SUBS={{LIVE_SUBS}} URLS={{URLS}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}}
+  - name: content_enumeration
+    cmds:
+      - rayder -q -w {{CONTENT_WORKFLOWS_FOLDER}}/content_enumeration.yaml LIVE_SUBDOOMAINS_FILE={{LIVE_SUBDOOMAINS_FILE}} ALL_URLS_FILE={{ALL_URLS_FILE}} GAU_URLS_FILE={{GAU_URLS_FILE}} KATANA_URLS_FILE={{KATANA_URLS_FILE}} PARAMS_URLS_FILE={{PARAMS_URLS_FILE}} JS_URLS_FILE={{JS_URLS_FILE}} CLEANED_URLS_FILE={{CLEANED_URLS_FILE}} CONTENT_OUTPUT_PATH={{CONTENT_OUTPUT_PATH}} CONTENT_NOTIFY={{CONTENT_NOTIFY}} CONTENT_ACTIVE={{CONTENT_ACTIVE}} CONTENT_SCRIPTS_FOLDER={{CONTENT_SCRIPTS_FOLDER}} CONTENT_WORKFLOWS_FOLDER={{CONTENT_WORKFLOWS_FOLDER}}
   
   # - name: javascript_enum
   #   cmds:
