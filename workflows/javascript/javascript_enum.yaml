@@ -1,72 +1,41 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  LIVE_URLS: output/vuln/content/urls/all.live.urls.txt
-  JAVASCRIPT: output/vuln/content/javascript/all.javascript.txt
-  NOTIFY: true
-  ACTIVE: false
-  RECURSION: false
-  NUCLEI: false
-  JAVASCRIPT_DOWNLOAD: false
+  JS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.js.urls.txt
+  SELECTED_JS_FILES: ${ROOT}/output/tesla/content/javascript/all.javascript.txt
+  JS_OUTPUT_PATH: ${ROOT}/output/tesla/content/javascript
+  JS_NOTIFY: true
+  JS_ACTIVE: true
+  JS_NUCLEI: true
+  JS_DOWNLOAD: true
+  JS_DOWNLOAD_FOLDER: ${ROOT}/output/tesla/content/javascript/downloads
+  JS_SCRIPTS_FOLDER: ${ROOT}/workflows/javascript/src
+  JS_WORKFLOWS_FOLDER: ${ROOT}/workflows/javascript
+  JS_REGEX_FILE: /opt/JSScanner/Regex.txt
+  SUBDOMAIN_OUTPUT_FILE: ${ROOT}/output/tesla/subs/all.subs.txt
+  ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
 
 parallel: false
 modules:
 
     - name: dir_creation
       cmds: 
-      - mkdir -p {{OUTPUT_PATH}}/content/javascript && touch {{OUTPUT_PATH}}/content/javascript/all.javascript.txt
+      - mkdir -p {{JS_OUTPUT_PATH}} && touch {{SELECTED_JS_FILES}}
 
     - name: subjs_enum
       cmds: 
-      - bash workflows/javascript/src/subjs_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'
+      - python {{JS_SCRIPTS_FOLDER}}/subjs_enum.py "{{JS_URLS_FILE}}" "{{JS_OUTPUT_PATH}}" "{{SUBDOMAIN_OUTPUT_FILE}}"
 
     - name: katana_enum
       cmds: 
-      - if {{ACTIVE}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
-
-    - name: linkfinder_enum
-      cmds: 
-      - bash workflows/javascript/src/linkfinder_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'
-
-    - name: subjs_enum
-      cmds: 
-      - bash workflows/javascript/src/subjs_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'
-
-    - name: katana_enum
-      cmds: 
-      - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
-
-    - name: linkfinder_enum
-      cmds: 
-      - if {{RECURSION}}; then bash workflows/javascript/src/linkfinder_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
-
-    - name: subjs_enum
-      cmds: 
-      - if {{RECURSION}}; then bash workflows/javascript/src/subjs_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'; fi
-
-    - name: katana_enum
-      cmds: 
-      - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/javascript/src/katana_js_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
+      - if {{JS_ACTIVE}}; then python {{JS_SCRIPTS_FOLDER}}/katana_js_enum.py "{{JS_URLS_FILE}}" "{{SELECTED_JS_FILES}}" "{{SUBDOMAIN_OUTPUT_FILE}}" "{{ALL_URLS_FILE}}"; fi
 
     - name: jsscanner_enum
       cmds: 
-      - bash workflows/javascript/src/jsscanner_enum.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'
+      - python3 {{JS_SCRIPTS_FOLDER}}/jsscanner_enum.py "{{SELECTED_JS_FILES}}" "{{JS_OUTPUT_PATH}}" "{{JS_REGEX_FILE}}"
 
     - name: download_javascript
       cmds:
-      - if {{JAVASCRIPT_DOWNLOAD}}; then bash workflows/javascript/src/download_js_files.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}'; fi
-
-    # - name: arjun_enum
-    #   cmds: 
-    #   - if {{ACTIVE}} and {{RECURSION}}; then bash workflows/content/src/arjun_enum.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'; fi
-    
-    - name: uro_cleaning
-      cmds: 
-      - bash workflows/content/src/uro_cleaning.sh '{{LIVE_URLS}}' '{{OUTPUT_PATH}}'
-
-    - name: unfurl_enum
-      cmds: 
-      - bash workflows/content/src/unfurl_enum.sh '{{OUTPUT_PATH}}'
+      - if {{JS_DOWNLOAD}}; then python {{JS_SCRIPTS_FOLDER}}/download_js_files.py "{{SELECTED_JS_FILES}}" "{{JS_DOWNLOAD_FOLDER}}"; fi
 
     - name: nuclei_enum
       cmds: 
-      - if {{NUCLEI}}; then bash workflows/javascript/src/nuclei_js_scan.sh '{{JAVASCRIPT}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}'; fi
+      - if {{JS_NUCLEI}}; then python {{JS_SCRIPTS_FOLDER}}/nuclei_js_scan.py "{{SELECTED_JS_FILES}}" "{{JS_OUTPUT_PATH}}" "{{JS_NOTIFY}}"; fi

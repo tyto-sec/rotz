@@ -40,7 +40,18 @@ vars:
   GAU_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.gau.urls.txt
   KATANA_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.katana.urls.txt
   PARAMS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.params.urls.txt
+
+  SELECTED_JS_FILES: ${ROOT}/output/tesla/content/javascript/all.javascript.txt
   JS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.js.urls.txt
+  JS_OUTPUT_PATH: ${ROOT}/output/tesla/content/javascript
+  JS_NOTIFY: true
+  JS_ACTIVE: true
+  JS_NUCLEI: true
+  JS_DOWNLOAD: true
+  JS_SCRIPTS_FOLDER: ${ROOT}/workflows/javascript/src
+  JS_WORKFLOWS_FOLDER: ${ROOT}/workflows/javascript
+  JS_REGEX_FILE: /opt/JSScanner/Regex.txt
+
 
   OUTPUT_PATH: "/app/output/vuln4"
   DOMAINS: "/app/input/vuln/domains.txt"
@@ -88,9 +99,9 @@ modules:
     cmds:
       - rayder -q -w {{CONTENT_WORKFLOWS_FOLDER}}/content_enumeration.yaml LIVE_SUBDOOMAINS_FILE={{LIVE_SUBDOOMAINS_FILE}} ALL_URLS_FILE={{ALL_URLS_FILE}} GAU_URLS_FILE={{GAU_URLS_FILE}} KATANA_URLS_FILE={{KATANA_URLS_FILE}} PARAMS_URLS_FILE={{PARAMS_URLS_FILE}} JS_URLS_FILE={{JS_URLS_FILE}} CLEANED_URLS_FILE={{CLEANED_URLS_FILE}} CONTENT_OUTPUT_PATH={{CONTENT_OUTPUT_PATH}} CONTENT_NOTIFY={{CONTENT_NOTIFY}} CONTENT_ACTIVE={{CONTENT_ACTIVE}} CONTENT_SCRIPTS_FOLDER={{CONTENT_SCRIPTS_FOLDER}} CONTENT_WORKFLOWS_FOLDER={{CONTENT_WORKFLOWS_FOLDER}}
   
-  # - name: javascript_enum
-  #   cmds:
-  #     - rayder -q -w workflows/javascript/javascript_enum.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_URLS={{LIVE_URLS}} JAVASCRIPT={{JAVASCRIPT}} NOTIFY={{NOTIFY}} ACTIVE={{ACTIVE}} RECURSION={{RECURSION}} NUCLEI={{NUCLEI}} JAVASCRIPT_DOWNLOAD={{JAVASCRIPT_DOWNLOAD}}
+  - name: javascript_enum
+    cmds:
+      - rayder -q -w {{JS_WORKFLOWS_FOLDER}}/javascript_enum.yaml JS_URLS_FILE={{JS_URLS_FILE}} SELECTED_JS_FILES={{SELECTED_JS_FILES}} JS_OUTPUT_PATH={{JS_OUTPUT_PATH}} JS_NOTIFY={{JS_NOTIFY}} JS_ACTIVE={{JS_ACTIVE}} JS_NUCLEI={{JS_NUCLEI}} JS_DOWNLOAD={{JS_DOWNLOAD}} JS_DOWNLOAD_FOLDER={{JS_DOWNLOAD_FOLDER}} JS_SCRIPTS_FOLDER={{JS_SCRIPTS_FOLDER}} JS_WORKFLOWS_FOLDER={{JS_WORKFLOWS_FOLDER}} JS_REGEX_FILE={{JS_REGEX_FILE}} SUBDOMAIN_OUTPUT_FILE={{SUBDOMAIN_OUTPUT_FILE}} ALL_URLS_FILE={{ALL_URLS_FILE}}
 
   # - name: fuzzing
   #   cmds:
