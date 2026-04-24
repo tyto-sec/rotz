@@ -1,58 +1,61 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  LIVE_SUBS: output/vuln/subs/all.live.subs.txt
-  URLS: output/vuln/content/urls/all.urls.txt
-  NOTIFY: true
-  ACTIVE: false
+  CONTENT_OUTPUT_PATH: ${ROOT}/output/tesla/content
+  LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/tesla/subs/all.live.subs.txt
+  LIVE_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
+  ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
+  CONTENT_NOTIFY: true
+  CONTENT_ACTIVE: true
+  CONTENT_SCRIPTS_FOLDER: ${ROOT}/workflows/content/src
+  CONTENT_WORKFLOWS_FOLDER: ${ROOT}/workflows/content
 
 parallel: false
 modules:
 
   - name: dir_creation
     cmds: 
-    - | 
-      mkdir -p {{OUTPUT_PATH}}/content/urls 
-      mkdir -p {{OUTPUT_PATH}}/content/tmp
-      mkdir -p {{OUTPUT_PATH}}/content/screenshots
-      mkdir -p {{OUTPUT_PATH}}/content/wordlists
-      touch {{OUTPUT_PATH}}/content/urls/all.urls.txt
+    - |
+      mkdir -p {{CONTENT_OUTPUT_PATH}}/urls 
+      mkdir -p {{CONTENT_OUTPUT_PATH}}/tmp
+      mkdir -p {{CONTENT_OUTPUT_PATH}}/screenshots
+      mkdir -p {{CONTENT_OUTPUT_PATH}}/wordlists
+      touch {{CONTENT_OUTPUT_PATH}}/urls/all.urls.txt
 
   - name: gowitness_screenshots
     cmds: 
-    - bash workflows/content/src/gowitness_screenshots.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gowitness_screenshots.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}" 
 
   - name: gowitness_enum
     cmds: 
-    - bash workflows/content/src/gowitness_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/gowitness_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
 
   - name: aquatone_screenshots
     cmds: 
-    - bash workflows/content/src/aquatone_screenshots.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
+    - python3 {{CONTENT_SCRIPTS_FOLDER}}/aquatone_screenshots.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
 
-  - name: gau_enum
-    cmds: 
-    - bash workflows/content/src/gau_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}' 
+  # - name: gau_enum
+  #   cmds: 
+  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/gau_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}" 
     
-  - name: katana_enum
-    cmds: 
-    - if {{ACTIVE}}; then bash workflows/content/src/katana_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'; fi
+  # - name: katana_enum
+  #   cmds: 
+  #   - if {{CONTENT_ACTIVE}}; then python3 {{CONTENT_SCRIPTS_FOLDER}}/katana_enum.py "{{LIVE_SUBDOOMAINS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"; fi
 
-  - name: paramspider_enum
-    cmds: 
-    - bash workflows/content/src/paramspider_enum.sh '{{LIVE_SUBS}}' '{{OUTPUT_PATH}}'
+  # - name: httpx_resolution
+  #   cmds: 
+  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/httpx_resolution.py "{{ALL_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
+
+  # - name: paramspider_enum
+  #   cmds: 
+  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/paramspider_enum.py "{{LIVE_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
 
   # - name: arjun_enum
   #   cmds: 
-  #   - if {{ACTIVE}}; then bash workflows/content/src/arjun_enum.sh '{{URLS}}' '{{OUTPUT_PATH}}'; fi
+  #   - if {{CONTENT_ACTIVE}}; then python3 {{CONTENT_SCRIPTS_FOLDER}}/arjun_enum.py "{{LIVE_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"; fi
 
-  - name: httpx_resolution
-    cmds: 
-    - bash workflows/content/src/httpx_resolution.sh '{{URLS}}' '{{OUTPUT_PATH}}'
+  # - name: uro_cleaning
+  #   cmds: 
+  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/uro_cleaning.py "{{LIVE_URLS_FILE}}" "{{CONTENT_OUTPUT_PATH}}"
 
-  - name: uro_cleaning
-    cmds: 
-    - bash workflows/content/src/uro_cleaning.sh '{{URLS}}' '{{OUTPUT_PATH}}'
-
-  - name: unfurl_enum
-    cmds: 
-    - bash workflows/content/src/unfurl_enum.sh '{{OUTPUT_PATH}}'
+  # - name: unfurl_enum
+  #   cmds: 
+  #   - python3 {{CONTENT_SCRIPTS_FOLDER}}/unfurl_enum.py "{{CONTENT_OUTPUT_PATH}}"
