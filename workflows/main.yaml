@@ -30,20 +30,20 @@ vars:
   SUBDOMAIN_RESOLUTION_WORKFLOWS_FOLDER: ${ROOT}/workflows/probing
   LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/hackthissite/subs/all.live.subs.txt
 
-  CONTENT_OUTPUT_PATH: ${ROOT}/output/tesla/contentC
+  CONTENT_OUTPUT_PATH: ${ROOT}/output/hackthissite/content
   CONTENT_NOTIFY: true
   CONTENT_ACTIVE: true
   CONTENT_SCRIPTS_FOLDER: ${ROOT}/workflows/content/src
   CONTENT_WORKFLOWS_FOLDER: ${ROOT}/workflows/content
-  CLEANED_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.cleaned.urls.txt
-  ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
-  GAU_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.gau.urls.txt
-  KATANA_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.katana.urls.txt
-  PARAMS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.params.urls.txt
+  CLEANED_URLS_FILE: ${ROOT}/output/hackthissite/content/urls/all.cleaned.urls.txt
+  ALL_URLS_FILE: ${ROOT}/output/hackthissite/content/urls/all.urls.txt
+  GAU_URLS_FILE: ${ROOT}/output/hackthissite/content/urls/all.gau.urls.txt
+  KATANA_URLS_FILE: ${ROOT}/output/hackthissite/content/urls/all.katana.urls.txt
+  PARAMS_URLS_FILE: ${ROOT}/output/hackthissite/content/urls/all.params.urls.txt
 
-  SELECTED_JS_FILES: ${ROOT}/output/tesla/content/javascript/all.javascript.txt
-  JS_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.js.urls.txt
-  JS_OUTPUT_PATH: ${ROOT}/output/tesla/content/javascript
+  SELECTED_JS_FILES: ${ROOT}/output/hackthissite/content/javascript/all.javascript.txt
+  JS_URLS_FILE: ${ROOT}/output/hackthissite/content/urls/all.js.urls.txt
+  JS_OUTPUT_PATH: ${ROOT}/output/hackthissite/content/javascript
   JS_NOTIFY: true
   JS_ACTIVE: true
   JS_NUCLEI: true
@@ -52,25 +52,21 @@ vars:
   JS_WORKFLOWS_FOLDER: ${ROOT}/workflows/javascript
   JS_REGEX_FILE: /opt/JSScanner/Regex.txt
 
+  DIRECTORY_WORDLIST: ${ROOT}/wordlists/directories/fuzz-Bo0oM.txt
+  PATH_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.paths.txt
+  WORDS_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.words.txt
+  GIT_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing/git
+  CEWL_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists/cewl
+  WORDLISTS_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists
+  FUZZING_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing
+  FUZZING_WORKFLOWS_FOLDER: ${ROOT}/workflows/fuzzing
+  FUZZING_SCRIPTS_FOLDER: ${ROOT}/workflows/fuzzing/src
+  FUZZING_ACTIVE: true
+  FUZZING_NOTIFY: false
 
-  OUTPUT_PATH: "/app/output/vuln4"
-  DOMAINS: "/app/input/vuln/domains.txt"
-  IPS: "/app/input/vuln/ips.txt"
-  ORGANIZATION: "vulnweb"
-  LIVE_SUBS: "/app/output/vuln4/subs/all.live.subs.txt"
-  SUBDOMAINS: "/app/output/vuln4/subs/all.subs.txt"
-  URLS: "/app/output/vuln4/content/urls/all.urls.txt"
-  LIVE_URLS: "/app/output/vuln4/content/urls/all.live.urls.txt"
-  JAVASCRIPT: "/app/output/vuln4/content/javascript/all.javascript.txt"
-  FUZZING_URLS: "/app/output/vuln4/content/urls/fuzzing/ffuf.urls.txt"
-  PATH_WORDLIST: "/app/output/vuln4/content/wordlists/all.paths.txt"
-  WORDS_WORDLIST: "/app/output/vuln4/content/wordlists/fuzzing.word.list"
-  SUBDOMAINS_WORDLIST: "/app/wordlists/subdomains/subdomains-top1million-5000.txt"
-  NOTIFY: true
-  ACTIVE: true
-  RECURSION: true
-  NUCLEI: true
-  JAVASCRIPT_DOWNLOAD: true
+  VULNERABILITY_OUTPUT_PATH: ${ROOT}/output/tesla/content/vuln
+  VULNERABILITY_SCRIPTS_FOLDER: ${ROOT}/workflows/vulns/src
+  VULNERABILITY_WORKFLOWS_FOLDER: ${ROOT}/workflows/vulns
 
 parallel: false
 modules:
@@ -103,10 +99,10 @@ modules:
     cmds:
       - rayder -q -w {{JS_WORKFLOWS_FOLDER}}/javascript_enum.yaml JS_URLS_FILE={{JS_URLS_FILE}} SELECTED_JS_FILES={{SELECTED_JS_FILES}} JS_OUTPUT_PATH={{JS_OUTPUT_PATH}} JS_NOTIFY={{JS_NOTIFY}} JS_ACTIVE={{JS_ACTIVE}} JS_NUCLEI={{JS_NUCLEI}} JS_DOWNLOAD={{JS_DOWNLOAD}} JS_DOWNLOAD_FOLDER={{JS_DOWNLOAD_FOLDER}} JS_SCRIPTS_FOLDER={{JS_SCRIPTS_FOLDER}} JS_WORKFLOWS_FOLDER={{JS_WORKFLOWS_FOLDER}} JS_REGEX_FILE={{JS_REGEX_FILE}} SUBDOMAIN_OUTPUT_FILE={{SUBDOMAIN_OUTPUT_FILE}} ALL_URLS_FILE={{ALL_URLS_FILE}}
 
-  # - name: fuzzing
-  #   cmds:
-  #     - rayder -q -w workflows/fuzzing/fuzzing.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_SUBS={{LIVE_SUBS}} FUZZING_URLS={{FUZZING_URLS}} PATH_WORDLIST={{PATH_WORDLIST}} WORDS_WORDLIST={{WORDS_WORDLIST}} SUBDOMAINS_WORDLIST={{SUBDOMAINS_WORDLIST}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
-
-  # - name: vulnerability_scan
-  #   cmds:
-  #     - rayder -q -w workflows/vulns/vulnerability_scan.yaml OUTPUT_PATH={{OUTPUT_PATH}} LIVE_URLS={{LIVE_URLS}} ACTIVE={{ACTIVE}} NOTIFY={{NOTIFY}}
+  - name: fuzzing
+    cmds:
+      - rayder -q -w {{FUZZING_WORKFLOWS_FOLDER}}/fuzzing.yaml FUZZING_OUTPUT_PATH={{FUZZING_OUTPUT_PATH}} GIT_OUTPUT_PATH={{GIT_OUTPUT_PATH}} CEWL_OUTPUT_PATH={{CEWL_OUTPUT_PATH}} WORDLISTS_OUTPUT_PATH={{WORDLISTS_OUTPUT_PATH}} LIVE_SUBDOOMAINS_FILE={{LIVE_SUBDOOMAINS_FILE}} SUBDOMAIN_WORDLIST={{SUBDOMAIN_WORDLIST}} DIRECTORY_WORDLIST={{DIRECTORY_WORDLIST}} PATH_WORDLIST={{PATH_WORDLIST}} WORDS_WORDLIST={{WORDS_WORDLIST}} ALL_URLS_FILE={{ALL_URLS_FILE}} FUZZING_ACTIVE={{FUZZING_ACTIVE}} FUZZING_NOTIFY={{FUZZING_NOTIFY}} FUZZING_SCRIPTS_FOLDER={{FUZZING_SCRIPTS_FOLDER}} FUZZING_WORKFLOWS_FOLDER={{FUZZING_WORKFLOWS_FOLDER}}
+  
+  - name: vulnerability_scan
+    cmds:
+      - rayder -q -w {{VULNERABILITY_WORKFLOWS_FOLDER}}/vulnerability_scan.yaml VULNERABILITY_OUTPUT_PATH={{VULNERABILITY_OUTPUT_PATH}} CLEANED_URLS_FILE={{CLEANED_URLS_FILE}} VULNERABILITY_SCRIPTS_FOLDER={{VULNERABILITY_SCRIPTS_FOLDER}} VULNERABILITY_WORKFLOWS_FOLDER={{VULNERABILITY_WORKFLOWS_FOLDER}}

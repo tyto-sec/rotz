@@ -1,12 +1,22 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  LIVE_SUBS: output/vuln/subs/all.live.subs.txt
-  FUZZING_URLS: output/vuln/content/urls/fuzzing/ffuf.urls.txt
-  PATH_WORDLIST: output/vuln/content/wordlists/all.paths.txt
-  WORDS_WORDLIST: output/vuln/content/wordlists/fuzzing.word.list
-  SUBDOMAINS_WORDLIST: wordlists/subdomains/subdomains-top1million-5000.txt
-  ACTIVE: true
-  NOTIFY: false
+  FUZZING_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing
+  GIT_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing/git
+  CEWL_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists/cewl
+  WORDLISTS_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists
+  
+  LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/tesla/subs/all.live.subs.txt
+  SUBDOMAIN_WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
+  DIRECTORY_WORDLIST: ${ROOT}/wordlists/directories/fuzz-Bo0oM.txt
+
+  PATH_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.paths.txt
+  WORDS_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.words.txt
+  
+  ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
+
+  FUZZING_WORKFLOWS_FOLDER: ${ROOT}/workflows/fuzzing
+  FUZZING_SCRIPTS_FOLDER: ${ROOT}/workflows/fuzzing/src
+  FUZZING_ACTIVE: true
+  FUZZING_NOTIFY: false
 
 parallel: false
 modules: 
@@ -14,28 +24,8 @@ modules:
   - name: create_dirs
     cmds:
       - |
-        mkdir -p {{OUTPUT_PATH}}/content/urls/fuzzing && mkdir -p {{OUTPUT_PATH}}/content/wordlists/fuzzing && mkdir -p {{OUTPUT_PATH}}/content/git
+        mkdir -p {{FUZZING_OUTPUT_PATH}} && mkdir -p {{WORDLISTS_OUTPUT_PATH}} && mkdir -p {{FUZZING_OUTPUT_PATH}}/git
 
-  - name: cewl_wordlist_generation
+  - name: fuzzing_parallel
     cmds:
-      - bash workflows/fuzzing/src/cewl_wordlist_generation.sh {{LIVE_SUBS}} {{OUTPUT_PATH}}
-
-  - name: extract_words_from_paths
-    cmds:
-      - bash workflows/fuzzing/src/extract_words_from_paths.sh {{PATH_WORDLIST}} {{OUTPUT_PATH}}
-
-  - name: concatanate_wordlists
-    cmds:
-      - cat {{OUTPUT_PATH}}/content/wordlists/cewl.word.list {{OUTPUT_PATH}}/content/wordlists/paths.word.list | anew {{OUTPUT_PATH}}/content/wordlists/fuzzing.word.list
-
-  - name: gobuster_fuzzing
-    cmds:
-      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_fuzzing.sh {{LIVE_SUBS}} {{OUTPUT_PATH}} {{WORDS_WORDLIST}} {{NOTIFY}}; fi
-  
-  - name: vhost_fuzzing
-    cmds:
-      - if {{ACTIVE}}; then bash workflows/fuzzing/src/gobuster_vhost_fuzzing.sh {{LIVE_SUBS}} {{OUTPUT_PATH}} {{SUBDOMAINS_WORDLIST}} {{NOTIFY}}; fi
-
-  - name: git_enum
-    cmds:
-      - mkdir -p {{OUTPUT_PATH}}/content/git && if {{ACTIVE}}; goop -l {{LIVE_SUBS}} -f {{OUTPUT_PATH}}/content/git; fi
+      - rayder -q -w {{FUZZING_WORKFLOWS_FOLDER}}/fuzzing_parallel.yaml FUZZING_OUTPUT_PATH={{FUZZING_OUTPUT_PATH}} GIT_OUTPUT_PATH={{GIT_OUTPUT_PATH}} CEWL_OUTPUT_PATH={{CEWL_OUTPUT_PATH}} WORDLISTS_OUTPUT_PATH={{WORDLISTS_OUTPUT_PATH}} LIVE_SUBDOOMAINS_FILE={{LIVE_SUBDOOMAINS_FILE}} SUBDOMAIN_WORDLIST={{SUBDOMAIN_WORDLIST}} DIRECTORY_WORDLIST={{DIRECTORY_WORDLIST}} PATH_WORDLIST={{PATH_WORDLIST}} WORDS_WORDLIST={{WORDS_WORDLIST}} ALL_URLS_FILE={{ALL_URLS_FILE}} FUZZING_ACTIVE={{FUZZING_ACTIVE}} FUZZING_NOTIFY={{FUZZING_NOTIFY}} FUZZING_SCRIPTS_FOLDER={{FUZZING_SCRIPTS_FOLDER}} FUZZING_WORKFLOWS_FOLDER={{FUZZING_WORKFLOWS_FOLDER}}

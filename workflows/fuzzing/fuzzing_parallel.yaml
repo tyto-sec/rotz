@@ -1,0 +1,42 @@
+vars:
+  FUZZING_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing
+  GIT_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing/git
+  CEWL_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists/cewl
+  WORDLISTS_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists
+  
+  LIVE_SUBDOOMAINS_FILE: ${ROOT}/output/tesla/subs/all.live.subs.txt
+  SUBDOMAIN_WORDLIST: ${ROOT}/wordlists/subdomains/subdomains-top1million-5000.txt
+  DIRECTORY_WORDLIST: ${ROOT}/wordlists/directories/fuzz-Bo0oM.txt
+
+  PATH_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.paths.txt
+  WORDS_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.words.txt
+  
+  ALL_URLS_FILE: ${ROOT}/output/tesla/content/urls/all.urls.txt
+
+  FUZZING_WORKFLOWS_FOLDER: ${ROOT}/workflows/fuzzing
+  FUZZING_SCRIPTS_FOLDER: ${ROOT}/workflows/fuzzing/src
+  FUZZING_ACTIVE: true
+  FUZZING_NOTIFY: false
+
+parallel: true
+modules: 
+
+  - name: cewl_wordlist_generation
+    cmds:
+      - python {{FUZZING_SCRIPTS_FOLDER}}/cewl_wordlist_generation.py {{LIVE_SUBDOOMAINS_FILE}} {{CEWL_OUTPUT_PATH}}
+
+  - name: extract_words_from_paths
+    cmds:
+      - python  {{FUZZING_SCRIPTS_FOLDER}}/extract_words_from_paths.py {{PATH_WORDLIST}} {{WORDLISTS_OUTPUT_PATH}}
+
+  - name: gobuster_fuzzing
+    cmds:
+      - if {{FUZZING_ACTIVE}}; then python {{FUZZING_SCRIPTS_FOLDER}}/gobuster_fuzzing.py {{LIVE_SUBDOOMAINS_FILE}} {{FUZZING_OUTPUT_PATH}} {{DIRECTORY_WORDLIST}} {{FUZZING_NOTIFY}}; fi
+  
+  - name: vhost_fuzzing
+    cmds:
+      - if {{FUZZING_ACTIVE}}; then python {{FUZZING_SCRIPTS_FOLDER}}/gobuster_vhost_fuzzing.py {{LIVE_SUBDOOMAINS_FILE}} {{FUZZING_OUTPUT_PATH}} {{SUBDOMAIN_WORDLIST}} {{FUZZING_NOTIFY}}; fi
+
+  - name: git_enum
+    cmds:
+      - mkdir -p {{GIT_OUTPUT_PATH}} && if {{FUZZING_ACTIVE}}; then goop -l {{LIVE_SUBDOOMAINS_FILE}} -f {{GIT_OUTPUT_PATH}}; fi
