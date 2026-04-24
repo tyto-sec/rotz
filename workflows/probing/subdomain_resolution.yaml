@@ -1,11 +1,12 @@
 vars:
-  OUTPUT_PATH: output/vuln
-  SUBDOMAINS: output/vuln/subs/all.subs.txt
-  NOTIFY: true
-
+  SUBDOMAIN_OUTPUT_PATH: ${ROOT}/output/hackthissite/subs
+  SUBDOMAIN_OUTPUT_FILE: ${ROOT}/output/hackthissite/subs/all.subs.txt
+  SUBDOMAIN_RESOLUTION_NOTIFY: true
+  SUBDOMAIN_RESOLUTION_SCRIPTS_FOLDER: ${ROOT}/workflows/probing/src
+  SUBDOMAIN_RESOLUTION_WORKFLOWS_FOLDER: ${ROOT}/workflows/probing
+  
 parallel: false
 modules:
   - name: httpx_resolution
     cmds: 
-      - bash workflows/probing/src/httpx_resolution.sh '{{SUBDOMAINS}}' '{{OUTPUT_PATH}}' '{{NOTIFY}}' 
-  
+      - python {{SUBDOMAIN_RESOLUTION_SCRIPTS_FOLDER}}/httpx_resolution.py "{{SUBDOMAIN_OUTPUT_FILE}}" "{{SUBDOMAIN_OUTPUT_PATH}}" "{{SUBDOMAIN_RESOLUTION_NOTIFY}}" 

@@ -48,7 +48,7 @@ def naabu_scan(input_file, output_path, notify_enabled=False):
 
         logger.info(f"Starting Naabu scan on {len(sanitized_targets)} targets from: {input_file}")
         
-        ports = "80,443,8080,8443,3000,4000,5000,8000,8888,9000"
+        ports = "80,443,8080,8443,3000,4000,5000,88000,9000,5000,8888,8181"
         
         # Use simple CONNECT scan (-s c) if not running as root, 
         # and ensure -Pn is used to skip host discovery if ICMP is blocked
