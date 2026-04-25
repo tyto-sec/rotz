@@ -53,12 +53,12 @@ vars:
   JS_REGEX_FILE: /opt/JSScanner/Regex.txt
 
   DIRECTORY_WORDLIST: ${ROOT}/wordlists/directories/fuzz-Bo0oM.txt
-  PATH_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.paths.txt
-  WORDS_WORDLIST: ${ROOT}/output/tesla/content/wordlists/all.words.txt
-  GIT_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing/git
-  CEWL_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists/cewl
-  WORDLISTS_OUTPUT_PATH: ${ROOT}/output/tesla/content/wordlists
-  FUZZING_OUTPUT_PATH: ${ROOT}/output/tesla/content/fuzzing
+  PATH_WORDLIST: ${ROOT}/output/hackthissite/content/wordlists/all.paths.txt
+  WORDS_WORDLIST: ${ROOT}/output/hackthissite/content/wordlists/all.words.txt
+  GIT_OUTPUT_PATH: ${ROOT}/output/hackthissite/content/fuzzing/git
+  CEWL_OUTPUT_PATH: ${ROOT}/output/hackthissite/content/wordlists/cewl
+  WORDLISTS_OUTPUT_PATH: ${ROOT}/output/hackthissite/content/wordlists
+  FUZZING_OUTPUT_PATH: ${ROOT}/output/hackthissite/content/fuzzing
   FUZZING_WORKFLOWS_FOLDER: ${ROOT}/workflows/fuzzing
   FUZZING_SCRIPTS_FOLDER: ${ROOT}/workflows/fuzzing/src
   FUZZING_ACTIVE: true
