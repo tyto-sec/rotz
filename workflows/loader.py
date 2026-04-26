@@ -23,7 +23,8 @@ def generate_vars(args_map):
         "TARGET": target,
         "INPUT_ORGANIZATION": org,
         "INPUT_DOMAINS": f"{root}/input/{target}/domains.txt",
-        
+        "INPUT_IPS": f"{root}/input/{target}/ips.txt",
+
         "SUBDOMAIN_OUTPUT_PATH": f"{root}/output/{target}/subs",
         "SUBDOMAIN_OUTPUT_FILE": f"{root}/output/{target}/subs/all.subs.txt",
         "LIVE_SUBDOOMAINS_FILE": f"{root}/output/{target}/subs/all.live.subs.txt",
