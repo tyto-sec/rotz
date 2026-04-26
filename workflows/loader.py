@@ -31,6 +31,9 @@ def generate_vars(args_map):
         "SUBDOMAIN_SCRIPTS_FOLDER": f"{root}/workflows/subdomains/src",
         "SUBDOMAIN_WORKFLOWS_FOLDER": f"{root}/workflows/subdomains",
         
+        "ORGANIZATION_SCRIPTS_FOLDER": f"{root}/workflows/organization/src",
+        "ORGANIZATION_WORKFLOWS_FOLDER": f"{root}/workflows/organization",
+
         "IPS_OUTPUT_PATH": f"{root}/output/{target}/ips",
         "IPS_OUTPUT_FILE": f"{root}/output/{target}/ips/all.ips.txt",
         "INFRASTRUCTURE_SCRIPTS_FOLDER": f"{root}/workflows/infrastructure/src",
@@ -140,7 +143,7 @@ def main():
             },
             {
                 "name": "infrastructure_enum",
-                "cmds": ["rayder -q -w {{INFRASTRUCTURE_WORKFLOWS_FOLDER}}/infrastructure_enum.yaml  INPUT_IPS={{INPUT_IPS}} IPS_OUTPUT_PATH={{IPS_OUTPUT_PATH}} SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} INFRASTRUCTURE_SCRIPTS_FOLDER={{INFRASTRUCTURE_SCRIPTS_FOLDER}} INFRASTRUCTURE_WORKFLOWS_FOLDER={{INFRASTRUCTURE_WORKFLOWS_FOLDER}}"]
+                "cmds": ["rayder -q -w {{INFRASTRUCTURE_WORKFLOWS_FOLDER}}/infrastructure_enum.yaml  INPUT_IPS={{INPUT_IPS}} IPS_OUTPUT_PATH={{IPS_OUTPUT_PATH}} SUBDOMAIN_OUTPUT_PATH={{SUBDOMAIN_OUTPUT_PATH}} INFRASTRUCTURE_NOTIFY={{NOTIFY}} INFRASTRUCTURE_SCRIPTS_FOLDER={{INFRASTRUCTURE_SCRIPTS_FOLDER}} INFRASTRUCTURE_WORKFLOWS_FOLDER={{INFRASTRUCTURE_WORKFLOWS_FOLDER}}"]
             },
             {
                 "name": "dns_enum",
